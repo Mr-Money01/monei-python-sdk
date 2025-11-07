@@ -3,7 +3,7 @@ requires = ["setuptools>=45", "wheel", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "monei"
+name = "monei-sdk"
 version = "0.1.0"
 description = "Official Python SDK for Monei API - AI agent for finance, Financial services, wallets, and crypto exchange"
 authors = [{name = "Monei Team", email = "tech@monei.cc"}]

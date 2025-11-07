@@ -5,7 +5,7 @@ The official Python SDK for Monei API - providing seamless integration with Mone
 ## Installation
 
 ```bash
-pip install monei
+pip install monei-sdk
 ```
 
 ## Quick Start
