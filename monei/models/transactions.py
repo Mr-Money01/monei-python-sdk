@@ -11,7 +11,7 @@ class TransactionResponseDto(BaseDto):
     type: str
     status: str
     reference: str
-    currency: str
+    currency: Optional[str] = None
     narration: str
 
 class TransactionDto(BaseDto):
