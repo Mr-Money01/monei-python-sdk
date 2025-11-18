@@ -172,3 +172,5 @@ output/
 # Test outputs
 test-results/
 .junit/
+
+test_sdk.py

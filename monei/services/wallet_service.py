@@ -22,7 +22,7 @@ class WalletService:
             params['chainId'] = chain_id
             
         response = await self.client._request("GET", "/wallet/me", params=params)
-        return UserWalletDto(**response['data'])
+        return UserWalletDto(**response)
     
     async def fund_wallet(self, amount: float) -> DepositResponseDto:
         """Fund wallet with Naira"""
@@ -49,7 +49,9 @@ class WalletService:
     async def get_banks(self) -> List[BankDto]:
         """Get available banks"""
         response = await self.client._request("GET", "/wallet/get-banks")
-        return [BankDto(**bank) for bank in response['data']]
+
+        banks = response["data"]
+        return [BankDto(**bank) for bank in banks]
     
     async def verify_bank_account(self, account_number: str, bank: str) -> BankAccountDto:
         """Verify bank account"""
@@ -59,4 +61,5 @@ class WalletService:
         response = await self.client._request(
             "POST", "/wallet/verify-bank-account", data=request_data.dict()
         )
+        
         return BankAccountDto(**response['data'])

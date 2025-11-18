@@ -16,12 +16,12 @@ class UserService:
         response = await self.client._request("GET", "/user/me")
         return UserDto(**response['data'])
     
-    async def update(self, user_id: str, update_data: UpdateUserDto) -> UserDto:
+    async def update(self, user_id: str, update_data: UpdateUserDto) -> str:
         """Update user information"""
         response = await self.client._request(
             "PATCH", f"/user/update/{user_id}", data=update_data.dict(exclude_none=True)
         )
-        return UserDto(**response['data'])
+        return response["message"]
     
     async def kyc_verify_bvn(self, bvn: str) -> UserKycInfoDto:
         """Verify BVN for KYC"""

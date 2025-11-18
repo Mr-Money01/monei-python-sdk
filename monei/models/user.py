@@ -13,7 +13,7 @@ class UserDto(BaseDto):
     email: str
     phone: str
     haveTransactionPin: bool
-    verified: bool
+    verified: Optional[bool] = None
     resetToken: Optional[str] = None
     resetTokenExpiry: Optional[int] = None
     dob: Optional[str] = None

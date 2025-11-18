@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "monei-sdk"
-version = "0.1.0"
+version = "0.1.1"
 description = "Official Python SDK for Monei API - AI agent for finance, Financial services, wallets, and crypto exchange"
 authors = [{name = "Monei Team", email = "tech@monei.cc"}]
 readme = "README.md"

@@ -7,7 +7,7 @@ from .base import BaseDto
 
 class SubWalletDto(BaseDto):
     """Sub-wallet model"""
-    parentWalletId: str
+    parentWalletId: Optional[str] = None  # Make optional
     type: str  # "FIAT" or "CRYPTO"
     currency: str
     balance: float
@@ -18,7 +18,7 @@ class SubWalletDto(BaseDto):
 
 class UserWalletDto(BaseModel):
     """User wallet model"""
-    nairaBalance: float
+    nairaBalance: str
     evmPortfolio: Optional[Dict[str, Any]] = None
     solPortfolio: Optional[Dict[str, Any]] = None
     subwallets: List[SubWalletDto]
@@ -52,12 +52,12 @@ class BankDto(BaseModel):
     swiftCode: Optional[str] = None
     bic: Optional[str] = None
     isMobileVerified: Optional[bool] = None
-    isCashPickUp: bool
-    nibssCode: str
-    id: str
+    isCashPickUp: Optional[bool] = None
+    nibssCode: Optional[str] = None
+    id: int
     code: str
     name: str
-    branches: List[List[Any]]
+    branches: Optional[List[List[Any]]] = []
 
 class BankAccountDto(BaseModel):
     """Bank account model"""
