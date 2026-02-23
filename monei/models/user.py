@@ -1,5 +1,5 @@
 """User-related models"""
-
+from typing import List, Optional, Dict, Any
 from typing import Optional
 from datetime import datetime
 from .base import BaseDto
@@ -23,6 +23,20 @@ class UserDto(BaseDto):
     deviceModel: Optional[str] = None
     platform: Optional[str] = None
     lastLoggedIn: Optional[str] = None
+
+class UserResponseDto(BaseModel):
+    """get user response model"""
+    statusCode: int
+    message: str 
+    data: UserDto
+    errors:Optional[Dict[str, Any]] = None
+
+class UpdateUserResponseDto(BaseModel):
+    """Update user response model"""
+    statusCode: int
+    message: str 
+    data: UserDto
+    errors:Optional[Dict[str, Any]] = None
 
 class UpdateUserDto(BaseModel):
     """Update user request model"""

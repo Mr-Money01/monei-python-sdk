@@ -1,15 +1,10 @@
 """Bill payment models"""
 
-from typing import Optional, List
+from typing import Optional, List,Any,Dict
 from datetime import datetime
 from enum import Enum
 from .base import BaseDto, BaseModel
-
-class BillCategory(str, Enum):
-    AIRTIME = "AIRTIME"
-    MOBILEDATA = "MOBILEDATA"
-    CABLEBILLS = "CABLEBILLS"
-    UTILITYBILLS = "UTILITYBILLS"
+from .enums.bills import BillCategory
 
 class BillerDto(BaseModel):
     """Biller information"""
@@ -32,12 +27,34 @@ class BillerDto(BaseModel):
     group_name: str
     category_name: str
     is_data: Optional[bool] = None
-    default_commission_on_amount: float
-    commission_on_fee_or_amount: int
+    default_commission_on_amount: Optional[float] = None
+    commission_on_fee_or_amount: Optional[int] = None
     validity_period: Optional[str] = None
+
+
+class ElectricityBillerDto(BaseModel):
+    """Electricity biller information"""
+    name: str
+    code: str
+    billerCode: str
+    
+class ElectricityBillerResponseDto(BaseModel):
+    """Electricity biller information"""
+    statusCode: int
+    message: str 
+    data: List[ElectricityBillerDto]
+    errors:Optional[Dict[str, Any]] = None
+
+class BillerItemsResponse(BaseModel):
+    """"""
+    statusCode: int
+    message: str 
+    data: List[BillerDto]
+    errors:Optional[Dict[str, Any]] = None
 
 class ValidateBillDto(BaseModel):
     """Validate bill request"""
+    billlerCode:str
     itemCode: str
     customer: str
 
@@ -52,7 +69,7 @@ class AirtimePurchaseDto(BaseModel):
     phoneNumber: str
     biller: str
     amount: float
-    isSchedule: bool = False
+    isSchedule: bool = Optional[False]
     scheduleData: Optional[CreateBillScheduleDto] = None
     saveBeneficiary: bool = False
     beneficiaryName: Optional[str] = None
@@ -106,6 +123,13 @@ class BillPaymentDto(BaseModel):
     units: Optional[str] = None
     validityPeriod: Optional[str] = None
 
+class BillPaymentResponseDto(BaseModel):
+    """"""
+    statusCode: int
+    message: str 
+    data: List[BillPaymentDto]
+    errors:Optional[Dict[str, Any]] = None
+
 class BillDto(BaseDto):
     """Bill history item"""
     userId: str
@@ -122,3 +146,32 @@ class BillDto(BaseDto):
     metadata: Optional[str] = None
     token: Optional[str] = None
     units: Optional[str] = None
+
+class BillHistoryDto(BaseModel):
+    """Bill history item"""
+    bills: List[BillDto]
+    page: int
+    limit: int
+    total: int
+    totalPages: int
+    hasNextt: bool
+    hasPrev:bool
+
+class BillHistoryResponseDto(BaseModel):
+    """Bill history response"""
+    statusCode: int
+    message: str
+    data: BillHistoryDto
+    errors:Optional[Dict[str, Any]] = None
+
+class BillResponseDto(BaseModel):
+    statusCode:int
+    message: str
+    data: BillDto
+    errors:Optional[Dict[str, Any]] = None
+
+class BillNotFoundResponseDto(BaseModel):
+    success:bool
+    message: str
+    errorCode:str
+    reference:str

@@ -2,7 +2,7 @@
 
 from typing import List, Optional
 from ..models.bills import (
-    BillerDto, ValidateBillDto, AirtimePurchaseDto, DataPurchaseDto,
+    BillerDto, ElectricityBillerDto, ValidateBillDto, AirtimePurchaseDto, DataPurchaseDto,
     ElectricityPaymentDto, CableTvPaymentDto, BillPaymentDto, BillDto,
     BillCategory
 )
@@ -24,6 +24,13 @@ class BillService:
             "GET", f"/bills/get-biller-items/{category.value}/{biller_name}"
         )
         return [BillerDto(**item) for item in response['data']]
+
+    async def get_electricity_biller_items(self) -> List[BillerDto]:
+        """Get biller items"""
+        response = await self.client._request(
+            "GET", f"/bills/billers/electricity"
+        )
+        return [ElectricityBillerDto(**item) for item in response['data']]
     
     async def validate_bill(self, item_code: str, customer: str) -> dict:
         """Validate bill information"""
@@ -61,9 +68,19 @@ class BillService:
         )
         return BillPaymentDto(**response['data'])
     
-    async def get_bill_history(self) -> List[BillDto]:
+    async def get_bills(self) -> List[BillDto]:
         """Get bill payment history"""
-        response = await self.client._request("GET", "/bills/history")
+        response = await self.client._request("GET", "/bills")
+        return [BillDto(**bill) for bill in response['data']]
+    
+    async def get_bill_by_reference(self, reference: str) -> List[BillDto]:
+        """Get bill payment history"""
+        response = await self.client._request("GET", f"/bills/reference/{reference}")
+        return [BillDto(**bill) for bill in response['data']]
+    
+    async def get_bill_receipt(self, transaction_id: str) -> List[BillDto]:
+        """Get bill payment history"""
+        response = await self.client._request("GET", f"/bills/receipt/{transaction_id}")
         return [BillDto(**bill) for bill in response['data']]
     
     async def get_bill_beneficiaries(self, category: Optional[str] = None) -> List[dict]:

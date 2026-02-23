@@ -29,16 +29,16 @@ class AgentChatResponseDto(BaseModel):
     """Agent chat response"""
     response: str
     conversationId: str
-    title: str
+    title: Optional[str] = None
 
 class ConversationListResponseDto(BaseModel):
     """Conversation list item"""
     id: str
-    title: str
+    title: Optional[str] = None
     createdAt: datetime
     updatedAt: datetime
     isPinned: bool
-    messageCount: int
+    messageCount: Optional[int] = None
 
 class ConversationMessagesResponseDto(BaseModel):
     """Conversation message"""

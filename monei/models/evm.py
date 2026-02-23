@@ -1,6 +1,6 @@
 """EVM wallet models"""
 
-from typing import Optional, List
+from typing import Optional, List,Any,Dict
 from .base import BaseModel
 
 class BalanceDto(BaseModel):
@@ -9,7 +9,7 @@ class BalanceDto(BaseModel):
 
 class UserTokenBalanceDto(BaseModel):
     """Token balance model"""
-    contractAddress: str
+    contractAddress: Optional[str] = None
     name: str
     symbol: str
     decimals: int
@@ -27,7 +27,7 @@ class UserEvmPortfolioDto(BaseModel):
     walletAddress: str
     network: str
     totalPortfolioValueUSD: str
-    nativeToken: UserTokenBalanceDto
+    nativeToken: Optional[UserTokenBalanceDto] = None
     tokens: List[UserTokenBalanceDto]
     updatedAt: str
 
@@ -46,4 +46,11 @@ class SendTokenDto(BaseModel):
 
 class Response(BaseModel):
     """Transaction response"""
-    txHash: str
+    statusCode: int
+    message: str
+    data: Dict[str, Any]
+    errors:Optional[Dict[str, Any]] = None
+    
+
+
+      

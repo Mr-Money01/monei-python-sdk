@@ -28,6 +28,11 @@ class SwapSolToTokenDto(BaseModel):
     amount: float
     slippageBps: Optional[int] = None
 
+class SwapTokenToSolDto(BaseModel):
+    """Swap SOL to token request"""
+    inputMint: str
+    amount: float
+
 class ZeroExQuoteDto(BaseModel):
     """0x quote response"""
     permit2: Optional[dict] = None
@@ -41,3 +46,7 @@ class SwapDto(BaseModel):
 class TxHashDto(BaseModel):
     """Transaction hash"""
     txHash: str
+
+class PriceResponseDto(BaseModel):
+    """Price response"""
+    amount: str

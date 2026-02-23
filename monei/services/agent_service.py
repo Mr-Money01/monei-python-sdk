@@ -1,6 +1,7 @@
 """AI Agent service"""
 
 from typing import List, Optional
+from urllib import response
 from ..models.agent import (
     AgentChatRequestDto, AgentStreamRequestDto, GuestAgentRequestDto,
     AgentChatResponseDto, ConversationListResponseDto,
@@ -50,11 +51,13 @@ class AgentService:
         await self.client._request("DELETE", f"/agent/conversations/{conversation_id}")
     
     async def pin_conversation(self, conversation_id: str, pin: bool) -> None:
-        """Pin/unpin conversation"""
-        request_data = PinConversationDto(pin=pin)
         await self.client._request(
-            "PATCH", f"/agent/conversations/{conversation_id}/pin", data=request_data.dict()
+            "PATCH",
+            f"/agent/conversations/{conversation_id}/pin",
+            data=PinConversationDto(pin=pin).model_dump()
         )
+
+
     
     async def stream_chat(self, request: AgentStreamRequestDto) -> dict:
         """Stream chat with AI agent"""

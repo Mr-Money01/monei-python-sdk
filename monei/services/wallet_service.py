@@ -2,8 +2,8 @@
 
 from typing import Dict, Any, List, Optional
 from ..models.wallet import (
-    UserWalletDto, FundWalletByNairaDto, DepositResponseDto,
-    WithdrawWalletDto, PeerTransferDto, BankDto, BankAccountDto,
+    FundwalletResponseDto, UserWalletDto, FundWalletByNairaDto, DepositResponseDto, VerifyBankResponseDto,
+    WithdrawWalletDto, PeerTransferDto, BankAccountResponseDto,
     VerifyBankAccountRequestDto
 )
 from ..exceptions import MoneiAPIError
@@ -24,13 +24,13 @@ class WalletService:
         response = await self.client._request("GET", "/wallet/me", params=params)
         return UserWalletDto(**response)
     
-    async def fund_wallet(self, amount: float) -> DepositResponseDto:
+    async def fund_wallet(self, amount: float) -> FundwalletResponseDto:
         """Fund wallet with Naira"""
         request_data = FundWalletByNairaDto(amount=amount)
         response = await self.client._request(
             "POST", "/wallet/user/fund-wallet", data=request_data.dict()
         )
-        return DepositResponseDto(**response['data'])
+        return FundwalletResponseDto(**response)
     
     async def withdraw_to_bank(self, request: WithdrawWalletDto) -> Dict[str, Any]:
         """Withdraw to bank account"""
@@ -46,14 +46,15 @@ class WalletService:
         )
         return response
     
-    async def get_banks(self) -> List[BankDto]:
+    async def get_banks(self) -> BankAccountResponseDto:
         """Get available banks"""
         response = await self.client._request("GET", "/wallet/get-banks")
 
-        banks = response["data"]
-        return [BankDto(**bank) for bank in banks]
+        #banks = response["data"]
+        #return [BankDto(**bank) for bank in banks]
+        return BankAccountResponseDto(**response)
     
-    async def verify_bank_account(self, account_number: str, bank: str) -> BankAccountDto:
+    async def verify_bank_account(self, account_number: str, bank: str) -> VerifyBankResponseDto:
         """Verify bank account"""
         request_data = VerifyBankAccountRequestDto(
             accountNumber=account_number, bank=bank
@@ -62,4 +63,4 @@ class WalletService:
             "POST", "/wallet/verify-bank-account", data=request_data.dict()
         )
         
-        return BankAccountDto(**response['data'])
+        return VerifyBankResponseDto(**response)

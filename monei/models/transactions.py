@@ -10,7 +10,7 @@ class TransactionResponseDto(BaseDto):
     amount: float
     type: str
     status: str
-    reference: str
+    reference: Optional[str] = None
     currency: Optional[str] = None
     narration: str
 
@@ -22,8 +22,8 @@ class TransactionDto(BaseDto):
     amount: float
     type: str
     status: str
-    currency: str
-    reference: str
+    currency: Optional[str] = None
+    reference: Optional[str] = None
     fincraReference: Optional[str] = None
     narration: str
     metadata: Optional[dict] = None

@@ -1,0 +1,58 @@
+"""Wallet service implementation"""
+
+from typing import Dict, Any, List, Optional
+from ...models.wallet import (
+    DepositDto,DepositAuthDto,PaymentResponseDto,StatusResponseDto,DepositWithPaymentMethodDto,DepositAuthResponseDto,GeneratePaymentLinkDto,PaymentLinkResponseDto,
+)
+from ...models.enums.wallet import DepositMethods
+from ...exceptions import MoneiAPIError
+
+
+class WalletDepositService:
+    """Deposit Service for wallet operations"""
+    
+    def __init__(self, client):
+        self.client = client
+
+
+    async def deposit(self, method:DepositMethods , request: DepositDto ) -> PaymentResponseDto:  
+
+        params = {}
+        if method:
+            params['method'] = method
+                
+        params = method
+        response = await self.client._request("POST", "wallet/deposit", data=request.dict(), params = params)
+        return PaymentResponseDto(**response)
+    
+
+    
+    async def deposit_via_payment_id(self, request:DepositWithPaymentMethodDto)-> PaymentResponseDto:
+
+        """create a payment method for user"""
+            
+        response = await self.client._request("POST", "/wallet/deposit/payment-method", data=request.dict())
+        return PaymentResponseDto(**response)
+    
+    async def authorize(self, request: DepositAuthDto) -> DepositAuthResponseDto:
+        """Authorize a pending charge"""
+        
+        response = await self.client._request(
+            "POST", "/wallet/deposit/authorize", data=request.dict()
+        )
+        return DepositAuthResponseDto(**response)
+    
+    async def generate_payment_link(self, request: GeneratePaymentLinkDto) -> PaymentLinkResponseDto:
+        """"""
+        response = await self.client._request(
+            "POST", "/wallet/deposit/payment-link", data=request.dict()
+        )
+        return PaymentLinkResponseDto(**response)
+    
+    async def payment_status(self, reference:str) -> StatusResponseDto:
+        """"""
+        response = await self.client._request(
+            "GET", f"/wallet/deposit/status/{reference}", 
+        )
+        return StatusResponseDto(**response)
+    

@@ -1,6 +1,7 @@
 """Main Monei client implementation"""
 
 import os
+from dotenv import load_dotenv
 from typing import Dict, Any, Optional
 import httpx
 from .exceptions import (
@@ -10,6 +11,9 @@ from .exceptions import (
     NotFoundError,
     RateLimitError,
 )
+
+# Load .env as soon as pytest starts
+load_dotenv()
 from .services.user_service import UserService
 from .services.wallet_service import WalletService
 from .services.evm_service import EvmService
@@ -19,6 +23,20 @@ from .services.bill_service import BillService
 from .services.beneficiary_service import BeneficiaryService
 from .services.exchange_service import ExchangeService
 from .services.agent_service import AgentService
+#from .services.kyc_verification_service import KycVerificationService
+from .services.payment_method_service import PaymentMethodService
+from .services.offramp.exchange import OfframpExchangeService
+from .services.offramp.ledger import OfframpLedgerService
+from .services.offramp.payouts import OfframpPayoutsService
+from .services.wallet.account_service import WalletAccountService
+from .services.wallet.deposit_service import WalletDepositService
+from .services.wallet.payout_service import WalletPayoutService
+from .services.wallet.utility_service import WalletUtilityService
+from .services.bills.discovery_service import BillDiscoveryService
+from .services.bills.pay_service import BillPayService
+from .services.bills.records_service import BillRecordsService
+from .services.bills.validation_service import BillValidationService
+from .services.business_service import BusinessService
 
 
 class MoneiClient:
@@ -61,6 +79,19 @@ class MoneiClient:
         self.beneficiaries = BeneficiaryService(self)
         self.exchange = ExchangeService(self)
         self.agent = AgentService(self)
+        #self.kyc = KycVerificationService(self)
+        self.payment_methods = PaymentMethodService(self)
+        self.offramp_exchange = OfframpExchangeService(self)
+        self.offramp_payouts = OfframpPayoutsService(self)
+        self.offramp_ledger = OfframpLedgerService(self)
+        self.wallet_account = WalletAccountService(self)
+        self.wallet_deposit = WalletDepositService(self)
+        self.wallet_payout = WalletPayoutService(self)
+        self.wallet_utility = WalletUtilityService(self)
+        self.bill_discovery = BillDiscoveryService(self)
+        self.bill_pay = BillPayService(self)
+        self.bill_record = BillRecordsService(self)
+        self.business_service = BusinessService(self)
     
     @property
     def client(self) -> httpx.AsyncClient:
@@ -95,9 +126,12 @@ class MoneiClient:
                 params=params
             )
             
+            print(f"Request URL: {response}")
             # Handle different status codes
             if response.status_code in [200, 201]:
-                return response.json()
+                if not response.content:
+                    return None
+                return response.json() 
             elif response.status_code == 400:
                 raise ValidationError(f"Validation error: {response.text}", response.status_code, response)
             elif response.status_code == 401:

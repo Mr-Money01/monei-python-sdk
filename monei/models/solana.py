@@ -22,11 +22,11 @@ class TokenInfoDto(BaseModel):
     mintAddress: str
     name: str
     symbol: str
-    balance: str
+    balance: float
     rawBalance: str
     decimals: int
-    priceUsd: float
-    valueUsd: float
+    priceUsd: Optional[float] = None
+    valueUsd: Optional[float] = None
 
 class PortfolioDto(BaseModel):
     """Solana portfolio"""
@@ -34,9 +34,9 @@ class PortfolioDto(BaseModel):
     address: str
     nativeBalance: str
     nativeBalanceLamports: str
-    nativeBalanceUsd: float
+    nativeBalanceUsd: Optional[float] = None
     tokens: List[TokenInfoDto]
-    totalValueUsd: float
+    totalValueUsd: Optional[float] = None
 
 class TransferSolDto(BaseModel):
     """Transfer SOL request"""
