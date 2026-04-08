@@ -13,7 +13,7 @@ class ExchangeService:
         self.client = client
     
     # EVM Exchange
-    async def get_swap_native_to_token_price(self, request: SwapNativeToTokenDto) -> PriceResponseDto:
+    async def get_native_to_token_price(self, request: SwapNativeToTokenDto) -> PriceResponseDto:
         """Get price for native to token swap"""
         response = await self.client._request(
             "POST", "/evm-exchange/price/native-to-token", data=request.dict()
@@ -27,7 +27,7 @@ class ExchangeService:
         )
         return TxHashDto(**response['data'])
     
-    async def get_swap_token_to_token_price(self, request: SwapTokenToTokenDto) -> PriceResponseDto:
+    async def get_token_to_token_price(self, request: SwapTokenToTokenDto) -> PriceResponseDto:
         """Get price for token to token swap"""
         response = await self.client._request(
             "POST", "/evm-exchange/price/token-to-token", data=request.dict()
@@ -41,7 +41,7 @@ class ExchangeService:
         )
         return TxHashDto(**response['data'])
 
-    async def get_swap_token_to_native_price(self, request: SwapTokenToTokenDto) -> PriceResponseDto:
+    async def get_token_to_native_price(self, request: SwapTokenToTokenDto) -> PriceResponseDto:
         """Get price for token to native swap"""
         response = await self.client._request(
             "POST", "/evm-exchange/price/token-to-native", data=request.dict()
@@ -58,7 +58,7 @@ class ExchangeService:
     # Solana Exchange
    
     
-    async def get_token_to_sol_quote(self, input_mint: str, amount: float) -> dict:
+    async def get_token_to_solana_quote(self, input_mint: str, amount: float) -> dict:
         """Get Solana swap quote"""
         params = {
             'inputMint': input_mint, 
@@ -67,7 +67,7 @@ class ExchangeService:
         response = await self.client._request("GET", "/solana-exchange/quote/token-to-sol", params=params)
         return response
     
-    async def get_sol_to_token_quote(self, input_mint: str, amount: float) -> dict:
+    async def get_solana_to_token_quote(self, input_mint: str, amount: float) -> dict:
         """Get Solana swap quote"""
         params = {
             'outputMint': input_mint, 

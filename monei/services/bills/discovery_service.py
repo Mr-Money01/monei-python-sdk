@@ -11,7 +11,7 @@ class BillDiscoveryService:
     def __init__(self, client):
         self.client = client
     
-    async def get_biller_items(self, category: BillCategory, biller_name: str) -> BillerItemsResponse:
+    async def get_biller(self, category: BillCategory, biller_name: str) -> BillerItemsResponse:
         """Get biller items"""
         response = await self.client._request(
             "GET", f"/bills/get-biller-items/{category.value}/{biller_name}"
@@ -19,7 +19,7 @@ class BillDiscoveryService:
         #return [BillerDto(**item) for item in response['data']]
         return response
 
-    async def get_electricity_biller_items(self) -> ElectricityBillerResponseDto:
+    async def get_electricity_biller(self) -> ElectricityBillerResponseDto:
         """Get all electricity distribution companies"""
         response = await self.client._request(
             "GET", f"/bills/discovery/electricity-operators"

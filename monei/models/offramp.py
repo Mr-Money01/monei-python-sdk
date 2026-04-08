@@ -9,21 +9,24 @@ from .enums.offramp import OfframpStatus,WalletType,OfframpCurrency, Providers, 
     
 
 class OframpQuoteRequestDto(BaseModel):
-  token: str
-  network: str
-  amount: str
-  fiat: Optional[str]=None
+  token: OfframpAssets
+  network: OfframpNetworks
+  amount: int
+  fiat: Optional[OfframpCurrency]=None
 
 class AssetsResponseDto(BaseModel):
     statusCode: int
     message: str
     data: list
     errors:Optional[Dict[str, Any]] = None
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
 
 class OfframpExchangeRateDto(BaseModel):
     token: str
     network: str
-    amount: str
+    amount: int
     fiat: Optional[str]=None
     rate: Optional[int] = None
 
@@ -32,13 +35,16 @@ class OframpQuoteResponseDto(BaseModel):
     message: str
     data: OfframpExchangeRateDto
     errors:Optional[Dict[str, Any]] = None
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
 
 class SwapCryptoToFiatRequestDto(BaseModel):
-    amount: str
+    amount: int
     token: str
-    network: int
+    network: str
     fiatCurrency: str
-    bankCode: int
+    bankCode: str
     accountNumber: str
     accountName: str
 
@@ -60,8 +66,8 @@ class AmountsDto(BaseModel):
 class BeneficiaryDto(BaseModel):
   bankCode: str
   bankName: str
-  amountNumber: str
-  accountName: int
+  accountNumber: int
+  accountName: str
 
 class OnChainDto(BaseModel):
   depositAddress: str
@@ -84,8 +90,8 @@ class OfframpOrderResponseDataDto(BaseModel):
     amounts: AmountsDto
     beneficiary:BeneficiaryDto
     onChain:OnChainDto
-    provider: Providers
-    providerReference:str
+    #provider: Providers
+    #providerReference:str
     meta:Optional[Dict[str, Any]] = None
     failureReason: Optional[str]=None
     timestamps:TimestampsDto
@@ -96,6 +102,10 @@ class OfframpOrderResponseDto(BaseModel):
     data: OfframpOrderResponseDataDto
     errors:Optional[Dict[str, Any]] = None
 
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+
 class PayoutBankDto(BaseModel):
     name: str
     code: str
@@ -105,6 +115,10 @@ class PayoutBanksResponseDto(BaseModel):
     message: str
     data: list[PayoutBankDto]
     errors:Optional[Dict[str, Any]] = None
+    
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
 
 class VerifyOfframpBankAccountResponseDataDto(BaseModel):
     bankCode: int
@@ -117,6 +131,10 @@ class VerifyOfframpBankAccountResponseDto(BaseModel):
     message: str
     data: VerifyOfframpBankAccountRequestDto
     errors:Optional[Dict[str, Any]] = None
+
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
 
 class VerifyOfframpBankAccountRequestDto(BaseModel):
     bankCode: str
@@ -141,11 +159,29 @@ class OfframpTransactionResponseDto(BaseModel):
     updatedAt:str
     expiresAt:str
 
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+
+class MetaDto(BaseDto):
+    currentPage: int
+    itemsPerPage: int
+    totalItems: int
+    totalPages: int
+
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+
 class OfframpTransactionListResponseDto(BaseModel):
     ststusCode:int
     message:str
     data:list[OfframpTransactionResponseDto]
-    meta:Optional[Dict[str, Any]] = None
+    meta:Optional[MetaDto] = None
+
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
 
 class OfframpTransactionDetailResponseDto(BaseModel):
     id: str
@@ -166,6 +202,10 @@ class OfframpTransactionDetailResponseDto(BaseModel):
     debitPaymentDetails:Optional[Dict[str, Any]] = None
     creditPaymentDetails:Optional[Dict[str, Any]] = None
     completedAt:str
+
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
 
 class OfframpStatusRequestDto(BaseModel):
     reference: str

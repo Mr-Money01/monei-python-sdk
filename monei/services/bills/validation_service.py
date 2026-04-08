@@ -13,7 +13,7 @@ class BillValidationService:
         self.client = client
     
    
-    async def validate_bill(self, request:ValidateBillDto) -> dict:
+    async def validate(self, request:ValidateBillDto) -> dict:
         """Validate bill information"""
        
         response = await self.client._request(

@@ -18,8 +18,16 @@ load_dotenv()
 API_KEY = os.getenv("MONEI_API_KEY")
 BASE_URL = os.getenv("BASE_URL")
 
+DEV_API_KEY = os.getenv("DEV_API_KEY")
+DEV_BASE_URL = os.getenv("DEV_BASE_URL")
+
+SANDBOX_API_KEY = os.getenv("SANDBOX_API_KEY")
+
 assert API_KEY, "Missing API_KEY in .env"
 assert BASE_URL, "Missing BASE_URL in .env"
+assert DEV_API_KEY, "Missing DEV_API_KEY in .env"
+assert DEV_BASE_URL, "Missing DEV_BASE_URL in .env"
+assert SANDBOX_API_KEY, "Missing SANDBOX_API_KEY in .env"
 
 # -----------------------------
 # Main Monei client fixture
@@ -27,7 +35,7 @@ assert BASE_URL, "Missing BASE_URL in .env"
 @pytest.fixture
 async def monei_client():
     """Function-scoped client for Windows-safe async tests."""
-    client = MoneiClient(api_key=API_KEY, base_url=BASE_URL)
+    client = MoneiClient(api_key=SANDBOX_API_KEY, base_url=BASE_URL)
     yield client
     await client.close()
 
@@ -113,6 +121,10 @@ async def bill_pay_service(monei_client):
 @pytest.fixture
 async def bill_record_service(monei_client):
     yield monei_client.bill_record
+
+@pytest.fixture
+async def bill_validate_service(monei_client):
+    yield monei_client.bill_validate
 
 
 @pytest.fixture

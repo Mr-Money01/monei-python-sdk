@@ -1,4 +1,5 @@
 import os
+from urllib import response
 import pytest
 import logging
 from decimal import Decimal
@@ -35,9 +36,18 @@ class TestExchangeService:
             tokenOut=self.usdc_address,
             amount="0.01"
         )
-        quote = await self.client.exchange.get_swap_native_to_token_price(request)
-        logger.info(f"Native->Token quote: {quote}")
-        #assert hasattr(quote, "price")
+        response = await self.client.exchange.get_swap_native_to_token_price(request)
+        #logger.info(f"Native->Token quote: {quote}")
+
+        
+        # Assertions
+        assert "data" in response
+        assert "message" in response
+        assert "statusCode" in response
+
+        # Extract typed data
+        data = response.data
+        
 
     async def test_get_token_to_token_price(self):
         request = SwapTokenToTokenDto(
@@ -45,9 +55,16 @@ class TestExchangeService:
             outputMint=self.usdt_address,
             amount= 0.2
         )
-        quote = await self.client.exchange.get_swap_token_to_token_price(request)
-        logger.info(f"Token->Token quote: {quote}")
-        assert hasattr(quote, "amount")
+        response = await self.client.exchange.get_swap_token_to_token_price(request)
+        logger.info(f"Token->Token quote: {response}")
+        assert hasattr(response, "data")
+        # Assertions
+        assert "data" in response
+        assert "message" in response
+        assert "statusCode" in response
+
+        # Extract typed data
+        data = response.data
 
     async def test_get_token_to_native_price(self):
         request = SwapTokenToNativeDto(
@@ -55,9 +72,16 @@ class TestExchangeService:
             tokenIn='0xfb5B838b6cfEEdC2873aB27866079AC55363D37E',
             amount="0.1"
         )
-        quote = await self.client.exchange.get_swap_token_to_native_price(request)
-        logger.info(f"Native->Token quote: {quote}")
+        response = await self.client.exchange.get_swap_token_to_native_price(request)
+        logger.info(f"Native->Token quote: {response}")
         #assert hasattr(quote, "price")
+        # Assertions
+        assert "data" in response
+        assert "message" in response
+        assert "statusCode" in response
+
+        # Extract typed data
+        data = response.data
     
     async def test_swap_native_to_token(self):
         request = SwapNativeToTokenDto(
@@ -65,9 +89,18 @@ class TestExchangeService:
             tokenOut= self.usdc_address,
             amount="0.001"
         )
-        tx = await self.client.exchange.swap_native_to_token(request)
-        logger.info(f"Native->Token swap TX: {tx}")
-        assert hasattr(tx, "txHash")
+        response = await self.client.exchange.swap_native_to_token(request)
+        logger.info(f"Native->Token swap TX: {response}")
+        
+        # Assertions
+        assert "data" in response
+        assert "message" in response
+        assert "statusCode" in response
+
+        # Extract typed data
+        data = response.data
+        logger.info(f"Swap transaction data: {data}")
+        assert "txhash" in data
 
 
 
@@ -78,9 +111,18 @@ class TestExchangeService:
             tokenIn=self.usdt_address,
             amount="0.0001"
         )
-        tx = await self.client.exchange.swap_token_to_native(request)
-        logger.info(f"Native->Token swap TX: {tx}")
-        assert hasattr(tx, "txHash")
+        response = await self.client.exchange.swap_token_to_native(request)
+        #logger.info(f"Native->Token swap TX: {response}")
+
+        # Assertions
+        assert "data" in response
+        assert "message" in response
+        assert "statusCode" in response
+
+        # Extract typed data
+        data = response.data
+        logger.info(f"Swap transaction data: {data}")
+        assert "txhash" in data
 
     
     async def test_swap_token_to_token(self):
@@ -90,9 +132,19 @@ class TestExchangeService:
             outputMint=self.usdt_address,
             amount= 0.0001
         )
-        tx = await self.client.exchange.swap_token_to_token(request)
-        logger.info(f"Token->Token swap TX: {tx}")
-        assert hasattr(tx, "txHash")
+        response = await self.client.exchange.swap_token_to_token(request)
+        #logger.info(f"Token->Token swap TX: {response}")
+
+        # Assertions
+        assert "data" in response
+        assert "message" in response
+        assert "statusCode" in response
+
+        # Extract typed data
+        data = response.data
+        logger.info(f"Swap transaction data: {data}")
+        assert "txhash" in data
+        
 
     # ---------------- Solana Exchange ---------------- #
 
@@ -135,9 +187,14 @@ class TestExchangeService:
             outputMint=self.sol_usdc_mint,
             amount=0.0001
         )
-        tx = await self.client.exchange.swap_sol_to_token(request)
-        logger.info(f"SOL->Token swap TX: {tx}")
-        assert hasattr(tx, "signature")
+        response = await self.client.exchange.swap_sol_to_token(request)
+        logger.info(f"SOL->Token swap TX: {response}")
+        assert response.statusCode == 200
+        assert response.message is not None
+        assert response.data is not None
+
+        assert response.data.txUrl is not None
+        assert response.data.signature is not None
 
         
 
@@ -146,9 +203,14 @@ class TestExchangeService:
             inputMint='Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
             amount=0.0001
         )
-        tx = await self.client.exchange.swap_token_to_sol(request)
-        logger.info(f"SOL->Token swap TX: {tx}")
-        assert hasattr(tx, "signature")
+        response = await self.client.exchange.swap_token_to_sol(request)
+        logger.info(f"SOL->Token swap TX: {response}")
+        assert response.statusCode == 200
+        assert response.message is not None
+        assert response.data is not None
+
+        assert response.data.txUrl is not None
+        assert response.data.signature is not None
 
     
     async def test_swap_token_to_token_solana(self):
@@ -159,15 +221,12 @@ class TestExchangeService:
         )
         tx = await self.client.exchange.swap_token_to_token_solana(request)
         logger.info(f"Token->Token Solana swap TX: {tx}")
-        assert hasattr(tx, "txHash")
+        assert response.statusCode == 200
+        assert response.message is not None
+        assert response.data is not None
+
+        assert response.data.txUrl is not None
+        assert response.data.signature is not None
 
     
-    async def test_swap_token_to_sol(self):
-        request = SwapSolToTokenDto(
-            to=self.sol_test_recipient,
-            tokenMint=self.sol_input_mint,
-            amount=str(self.sol_amount)
-        )
-        tx = await self.client.exchange.swap_token_to_sol(request)
-        logger.info(f"Token->SOL swap TX: {tx}")
-        assert hasattr(tx, "txHash")
+    

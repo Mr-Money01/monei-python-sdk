@@ -8,33 +8,26 @@ pytestmark = pytest.mark.integration
 
 
 @pytest.mark.asyncio
-class TestBillService:
+class TestBillRecordService:
 
     @pytest.fixture(autouse=True)
-    async def _setup(self, monei_client):
-        self.client = monei_client
-        self.test_mobile_number = os.getenv("TEST_MOBILE_NUMBER")
-        self.test_electricity_account = os.getenv("TEST_ELECTRICITY_ACCOUNT")
-        self.test_cable_tv_account = os.getenv("TEST_CABLETV_ACCOUNT")
-        self.test_airtime_amount = os.getenv("TEST_AIRTIME_AMOUNT", "50")
-        self.test_data_amount = os.getenv("TEST_DATA_AMOUNT", "50")
-        self.test_beneficiary_id = os.getenv("TEST_BENEFICIARY_ID")
-     
-
+    async def _setup(self, bill_record_service):
+        self.client = bill_record_service
+        
     async def test_get_bills(self):
-        bills = await self.client.bills.get_bills()
+        bills = await self.client.get_bills()
         logger.info(f"Bill payments: {bills}")
         
 
     async def test_get_bill_by_reference(self):
-        reference = "test-reference-123"
-        bills = await self.client.bills.get_bill_by_reference(reference)
+        reference = "bill1773258763788-978e2b1c-edc7-4c67-bfcc-8438a0513f21"
+        bills = await self.client.get_bill_by_reference(reference)
         logger.info(f"Bill payments by reference '{reference}': {bills}")
         
 
     async def test_get_bill_receipt(self):
-        transaction_id = "test-transaction-id-123"
-        bills = await self.client.bills.get_bill_receipt(transaction_id)
+        transaction_id = "330b0972-6ecf-4b22-b6d1-69a38917de89"
+        bills = await self.client.get_bill_receipt(transaction_id)
         logger.info(f"Bill receipt for transaction ID '{transaction_id}': {bills}")
         
 

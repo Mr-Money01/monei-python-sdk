@@ -10,7 +10,7 @@ pytestmark = pytest.mark.integration
 
 
 @pytest.mark.asyncio
-class TestBillService:
+class TestBillValidateService:
 
     @pytest.fixture(autouse=True)
     async def _setup(self, bill_validation_service):

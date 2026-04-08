@@ -56,9 +56,7 @@ class TestWalletService:
     async def test_get_banks(self):
         banks = await self.client.wallet.get_banks()
         logger.info(f"Banks: {banks}")
-        #assert isinstance(banks, list)
-        #assert len(banks) > 0
-        #assert hasattr(banks[0], "name")
+        
 
     
     async def test_verify_bank_account(self):

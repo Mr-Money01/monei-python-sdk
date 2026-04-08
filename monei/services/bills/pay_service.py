@@ -20,7 +20,7 @@ class BillPayService:
         #return BillPaymentDto(**response['data'])
         return response
     
-    async def buy_data(self, request: DataPurchaseDto) -> BillResponseDto:
+    async def buy_mobile_data(self, request: DataPurchaseDto) -> BillResponseDto:
         """Buy mobile data"""
         response = await self.client._request(
             "POST", "/bills/pay/data", data=request.dict()

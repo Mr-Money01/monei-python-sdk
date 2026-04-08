@@ -1,18 +1,17 @@
 """Wallet-related models"""
 
-
 from typing import Optional, Literal, Dict, Any,List
 from pydantic import BaseModel
 from datetime import datetime
 from .base import BaseDto
 from enum import Enum
-from .enums.wallet import PaymentStatus, NextActionType, DepositAuthType
+from .enums.wallet import PaymentStatus, NextActionType, DepositAuthType, AccountType
     
 
 class SubWalletDto(BaseDto):
     """Sub-wallet model"""
     parentWalletId: Optional[str] = None  # Make optional
-    type: str  # "FIAT" or "CRYPTO"
+    type: AccountType  # "FIAT" or "CRYPTO"
     currency: str
     balance: float
     chain: Optional[str] = None
@@ -39,13 +38,28 @@ class UserWalletResponseDto(BaseModel):
     statusCode: int
     message: str 
     data: UserWalletDto
-    errors:dict
+    errors:Optional[Dict[str, Any]] = None
 
 class GetNairaWalletResponseDto(BaseModel):
     """naira wallet details response model"""
     statusCode: int
     message: str 
-    data: BankAccountDto
+    data: NairaWalletDto
+    errors:Optional[Dict[str, Any]] = None
+
+class NairaWalletDto(BaseModel):
+    """naira wallet data model"""
+    id: str
+    type: AccountType
+    virtualAccount: Optional[VirtualAccountDto] = None
+    currency: str
+    balance: float
+    chain: Optional[str] = None
+    publicAddress: Optional[str] = None
+    createdAt: datetime
+    updatedAt: datetime
+    deletedDate: Optional[datetime] = None
+    
 
 class FundWalletByNairaDto(BaseModel):
     """Fund wallet request"""
@@ -80,15 +94,11 @@ class PeerTransferDto(BaseModel):
 
 class BankDto(BaseModel):
     """Bank model"""
-    swiftCode: Optional[str] = None
-    bic: Optional[str] = None
-    isMobileVerified: Optional[bool] = None
-    isCashPickUp: Optional[bool] = None
-    nibssCode: Optional[str] = None
+    
     id: int
     code: str
     name: str
-    branches: Optional[List[List[Any]]] = []
+    
 
 class BankAccountDto(BaseModel):
     """Bank account model"""
@@ -107,13 +117,13 @@ class BankListResponseDto(BaseModel):
     statusCode: int
     message: str 
     data: List[BankDto]
-    errors: dict
+    errors: Optional[dict] = None
 
-class VerifyBankResponseDto(BaseModel):
-    """verify bank response model"""
-    statusCode: int
-    message: str 
-    data: BankAccountDto
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+
+
 
 class VirtualAccountDto(BaseModel):
     id:str
@@ -125,13 +135,14 @@ class VirtualAccountDto(BaseModel):
     reference:str
     status:str
     isActive:bool
+    deletedDate: Optional[datetime] = None
 
 class VirtualAccountResponseDto(BaseModel):
     """virtual account response model"""
     statusCode: int
     message: str 
-    data: VirtualAccountDto
-    errors:dict
+    data: Optional[VirtualAccountDto] = None
+    errors: Optional[Any] = None
 
 class CreateVirtualAccountDto(BaseModel):
     """virtual account request model"""
@@ -185,17 +196,17 @@ class PaymentDto(BaseModel):
 
     amount:int
     totalAmount:int
-    reference:int
-    currency:int
-    redirectUrl:str
-    customization: Customization
-    customer: Customer
+    reference:str
+    currency:str
+    redirectUrl: Optional[str] = None
+    customization: Optional[Customization] = None
+    customer: Optional[Customer] = None
     narration:str
-    accountNumber:str
-    bankName:str
-    accountName:str
-    expiry_datetime:str
-    note:str
+    accountNumber:Optional[str] = None
+    bankName:Optional[str] = None
+    accountName:Optional[str] = None
+    expiry_datetime:Optional[str] = None
+    note:Optional[str] = None
     status:str
     nextAction:DepositNextActionDto
 
@@ -244,12 +255,44 @@ class DepositWithPaymentMethodDto(BaseModel):
     meta: Dict
     narration: str
 
+class DepositWithPaymentMethodResponseDto(BaseModel):
+    
+    """deposit with payment response model"""
+    statusCode: int
+    message: str 
+    data: DepositWithPaymentMethodResponseDataDto
+    errors: Optional[dict] = None
+
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+    
+class DepositWithPaymentMethodResponseDataDto(BaseModel):
+
+    reference: str
+    amount: str
+    status: str
+    currency: str
+    narration: str
+    nextAction:PaymentMethodNextActionDto
+
+class PaymentMethodNextActionDto(BaseModel):
+    
+    type: NextActionType
+    requires_pin: Optional[dict] = None
+    
+
 class PaymentResponseDto(BaseModel):
     """payment response model"""
     statusCode: int
     message: str 
     data: PaymentDto
-    errors: dict
+    errors: Optional[dict] = None
+
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+
 
 class DepositAuthResponseDto(BaseModel):
     """authorize charge response model"""
@@ -262,8 +305,8 @@ class DepositAuthDto(BaseModel):
     """authorize charge response model"""
     type: DepositAuthType
     reference: str 
-    pin: str
-    otp: str
+    pin: Optional[str] = None
+    otp: Optional[str] = None
     avs: FlwAvsAuthDto
 
 class FlwAvsAuthDto(BaseModel):
@@ -297,7 +340,13 @@ class PaymentLinkResponseDto(BaseModel):
     statusCode: int
     message: str 
     data: PaymentLinkDto
-    errors: dict
+    errors: Optional[dict] = None
+
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+
+    
 
 class StatusResponseDto(BaseModel):
     """authorize charge response model"""
@@ -305,6 +354,11 @@ class StatusResponseDto(BaseModel):
     message: str 
     data: dict
     errors: Optional[str]=None
+
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+
 
 class InitiateBankTransferDto(BaseModel):
     """bank transfer request model"""
@@ -349,18 +403,34 @@ class VerifyBankAccountRequestDto(BaseModel):
     accountNumber: str
     bank: str
 
+class VerifyBankResponseDto(BaseModel):
+    statusCode: int
+    message: str 
+    data: VerifyBankAccountDto
+    errors: Optional[dict] = None
+
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+
+class VerifyBankAccountDto(BaseModel):
+    accountNumber: str
+    accountName: str
+    bankCode: str
+    bankName: str
+
 class BankAccountResponseDto(BaseModel):
     
     statusCode: int
     message: str 
     data: BankAccountDto
-    errors:dict
+    errors:Optional[dict] = None
 
-class BankAccountDto(BaseModel):
-    accountName:str
-    accountNumber:str
-    bankCode:str
-    bankName:str
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+
+
 
 class NairaBalanceDto(BaseModel):
     id: str

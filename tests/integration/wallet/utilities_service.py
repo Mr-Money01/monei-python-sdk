@@ -20,17 +20,17 @@ class TestWalletUtilityService:
 
  
     async def test_get_banks(self):
-        response = await self.client.wallet.get_banks()
+        response = await self.client.get_banks()
         logger.info(f"Banks: {response}")
        
 
     
     async def test_verify_bank_account(self):
         request = VerifyBankAccountRequestDto(
-            accountNumber='',
-            bank=''
+            accountNumber='0736379044',
+            bank='058'
             
         )
-        bank_account = await self.client.wallet.verify_bank_account(request)
+        bank_account = await self.client.verify_bank_account(request)
         logger.info(f"Verified bank account: {bank_account}")
         

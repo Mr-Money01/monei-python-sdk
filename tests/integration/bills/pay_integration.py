@@ -11,17 +11,12 @@ pytestmark = pytest.mark.integration
 
 
 @pytest.mark.asyncio
-class TestBillService:
+class TestBillPayService:
 
     @pytest.fixture(autouse=True)
     async def _setup(self, bill_pay_service):
         self.client = bill_pay_service 
-        self.test_mobile_number = os.getenv("TEST_MOBILE_NUMBER")
-        self.test_electricity_account = os.getenv("TEST_ELECTRICITY_ACCOUNT")
-        self.test_cable_tv_account = os.getenv("TEST_CABLETV_ACCOUNT")
-        self.test_airtime_amount = os.getenv("TEST_AIRTIME_AMOUNT", "50")
-        self.test_data_amount = os.getenv("TEST_DATA_AMOUNT", "50")
-        self.test_beneficiary_id = os.getenv("TEST_BENEFICIARY_ID")
+        
 
  
     # ---------------- Action endpoints (toggled) ---------------- #

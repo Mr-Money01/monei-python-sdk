@@ -2,7 +2,7 @@
 
 from typing import Dict, Any, List, Optional
 from ...models.wallet import (
-    GetBankResponseDto,VerifyBankResponseDto,
+   VerifyBankResponseDto,
     VerifyBankAccountRequestDto,BankListResponseDto,BankAccountResponseDto
 )
 from ...exceptions import MoneiAPIError
@@ -21,7 +21,7 @@ class WalletUtilityService:
 
         #banks = response["data"]
         #return [BankDto(**bank) for bank in banks]
-        return BankAccountResponseDto(**response)
+        return BankListResponseDto(**response)
     
     async def verify_bank_account(self, request:VerifyBankAccountRequestDto) -> BankAccountResponseDto:
         """Verify bank account"""

@@ -2,7 +2,7 @@
 
 from typing import Dict, Any, List, Optional
 from ...models.wallet import (
-    DepositDto,DepositAuthDto,PaymentResponseDto,StatusResponseDto,DepositWithPaymentMethodDto,DepositAuthResponseDto,GeneratePaymentLinkDto,PaymentLinkResponseDto,
+    DepositDto,DepositAuthDto, DepositWithPaymentMethodResponseDto,PaymentResponseDto,StatusResponseDto,DepositWithPaymentMethodDto,DepositAuthResponseDto,GeneratePaymentLinkDto,PaymentLinkResponseDto,
 )
 from ...models.enums.wallet import DepositMethods
 from ...exceptions import MoneiAPIError
@@ -15,26 +15,22 @@ class WalletDepositService:
         self.client = client
 
 
-    async def deposit(self, method:DepositMethods , request: DepositDto ) -> PaymentResponseDto:  
+    async def initialize_deposit(self, method:DepositMethods , request: DepositDto ) -> PaymentResponseDto:  
 
-        params = {}
-        if method:
-            params['method'] = method
-                
-        params = method
-        response = await self.client._request("POST", "wallet/deposit", data=request.dict(), params = params)
+        params = {'method': method.value}
+        response = await self.client._request("POST", "/wallet/deposit", data=request.dict(), params = params)
         return PaymentResponseDto(**response)
     
 
     
-    async def deposit_via_payment_id(self, request:DepositWithPaymentMethodDto)-> PaymentResponseDto:
+    async def deposit_with_payment_method(self, request:DepositWithPaymentMethodDto)-> PaymentResponseDto:
 
         """create a payment method for user"""
             
         response = await self.client._request("POST", "/wallet/deposit/payment-method", data=request.dict())
-        return PaymentResponseDto(**response)
+        return DepositWithPaymentMethodResponseDto(**response)
     
-    async def authorize(self, request: DepositAuthDto) -> DepositAuthResponseDto:
+    async def authorize_deposit(self, request: DepositAuthDto) -> DepositAuthResponseDto:
         """Authorize a pending charge"""
         
         response = await self.client._request(
@@ -49,7 +45,7 @@ class WalletDepositService:
         )
         return PaymentLinkResponseDto(**response)
     
-    async def payment_status(self, reference:str) -> StatusResponseDto:
+    async def get_status(self, reference:str) -> StatusResponseDto:
         """"""
         response = await self.client._request(
             "GET", f"/wallet/deposit/status/{reference}", 

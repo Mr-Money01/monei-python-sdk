@@ -47,14 +47,14 @@ class SolanaService:
         response = await self.client._request("GET", "/solana/portfolio", params=params)
         return PortfolioDto(**response['data'])
     
-    async def transfer_sol(self, request: TransferSolDto) -> SignatureDto:
+    async def send_native_token(self, request: TransferSolDto) -> SignatureDto:
         """Transfer SOL"""
         response = await self.client._request(
             "POST", "/solana/transfer", data=request.dict()
         )
         return SignatureDto(**response['data'])
     
-    async def transfer_token(self, request: TransferTokenDto) -> SignatureDto:
+    async def send_token(self, request: TransferTokenDto) -> SignatureDto:
         """Transfer SPL token"""
         response = await self.client._request(
             "POST", "/solana/transfer-token", data=request.dict()

@@ -8,7 +8,7 @@ pytestmark = pytest.mark.integration
 
 
 @pytest.mark.asyncio
-class TestWalletService:
+class TestWalletAccountService:
 
     @pytest.fixture(autouse=True)
     async def _setup(self, wallet_account_service):
@@ -17,23 +17,23 @@ class TestWalletService:
         
     async def test_get_wallet(self):
         chain_id = "1"
-        response = await self.client.wallet.get_wallet(chain_id)
+        response = await self.client.me(chain_id)
         logger.info(f"Wallet info: {response}")
         #assert hasattr(wallet, "nairaBalance")
 
     async def test_naira_wallet(self):
-        response = await self.client.wallet.get_wallet()
+        response = await self.client.get_naira_wallet()
         logger.info(f"Naira Wallet info: {response}")
         #assert hasattr(wallet, "nairaBalance")
     
 
     async def test_create_virtual_account(self):
         request = CreateVirtualAccountDto(
-            nin = "1234567123",
+            nin = "12345678912",
             reference = "ref-001"
 
         )
-        response = await self.client.wallet.get_wallet(request)
+        response = await self.client.create_virtual_account(request)
         logger.info(f"Virtual Account: {response}")
       
     

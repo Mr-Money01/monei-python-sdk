@@ -5,6 +5,7 @@ from monei.models.offramp import (
     SwapCryptoToFiatRequestDto,OfframpExchangeRateDto
     
 )
+from monei.models.enums.offramp import OfframpAssets, OfframpNetworks, OfframpCurrency
 
 logger = logging.getLogger(__name__)
 pytestmark = pytest.mark.integration
@@ -27,26 +28,56 @@ class TestOfframpExchangeService:
 
     async def test_get_fiat_quote(self):
         request = OfframpExchangeRateDto(
-            token = "USDT",
-            network = "polygon",
-            amount = "100",
-            fiat = "NGN"
+            token = OfframpAssets.USDT,
+            network = OfframpNetworks.ethereum,
+            amount = 100,
+            fiat = OfframpCurrency.NGN
 
         ) 
-        quote = await self.client.get_fiat_quote(request)
+        quote = await self.client.get_quote(request)
         logger.info(f"Quote: {quote}")
         
 
     
-    async def test_crypto_to_fiat(self):
+    async def test_crypto_to_usdt(self):
         request = SwapCryptoToFiatRequestDto(
-            amount = "100",
-            token = "USDT",
-            network = "base",
-            fiatCurrency = "NGN",
-            bankCode = "058",
-            accountNumber = "0736379044",
-            accountName = "ayodeji"
+            amount = 100,
+            token = OfframpAssets.USDT,
+            network = OfframpNetworks.ethereum,
+            fiatCurrency = OfframpCurrency.NGN,
+            bankCode = "GTBINGLA",
+            accountNumber = "0123456789",
+            accountName = "John Doe"
+         
+        )
+        response = await self.client.initiate_swap(request)
+        logger.info(f"Chat response: {response}")
+        #assert hasattr(response, "message")
+
+
+    async def test_crypto_to_usdc(self):
+
+        #  Arrange - get quote for USDC first
+
+        request = OfframpExchangeRateDto(
+            token = OfframpAssets.USDC,
+            network = OfframpNetworks.ethereum,
+            amount = 600,
+            fiat = OfframpCurrency.NGN
+
+        ) 
+        usdc_quote = await self.client.get_quote(request)
+        logger.info(f"Quote: {usdc_quote}")
+
+
+        request = SwapCryptoToFiatRequestDto(
+            amount = 600,
+            token = "USDC",
+            network = "ethereum",
+            fiatCurrency = OfframpNetworks.ethereum,
+            bankCode = "GTBINGLA",
+            accountNumber = "0123456789",
+            accountName = "John Doe"
          
         )
         response = await self.client.crypto_to_fiat(request)

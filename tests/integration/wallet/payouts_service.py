@@ -22,7 +22,7 @@ class TestWalletPayoutsService:
         request = InitiateBankTransferDto(
             amount= 100,
             bank='',
-            accountNumber='',
+            accountNumber='1648925958',
             transactionPin='',
             reference='',
             narration='',
@@ -33,10 +33,7 @@ class TestWalletPayoutsService:
         logger.info(f"Bank Transfer: {response}")
         
 
-    @pytest.mark.skipif(
-        not os.getenv("ENABLE_SOL_SWAP_TESTS"),
-        reason="Solana swap tests disabled"
-    )
+   
     async def test_peer_transfer(self):
         request = PeerTransferDto(
             receiver='',

@@ -19,7 +19,7 @@ class OfframpExchangeService:
         response = await self.client._request("GET", "/offramp/exchange/assets")
         return response
     
-    async def get_fiat_quote(self, request:OfframpExchangeRateDto) -> dict:
+    async def get_quote(self, request:OfframpExchangeRateDto) -> dict:
         """Get Crypto-to-Fiat quote."""
         #response = await self.client._request("GET", "/offramp/exchange/quote", data=request.dict())
         response = await self.client._request(
@@ -29,7 +29,7 @@ class OfframpExchangeService:
         )
         return response
     
-    async def crypto_to_fiat(self, request:SwapCryptoToFiatRequestDto) -> OfframpOrderResponseDto:
+    async def initiate_swap(self, request:SwapCryptoToFiatRequestDto) -> OfframpOrderResponseDto:
         """initiate a Crypto-to-Fiat order"""
         response = await self.client._request(
             "POST", "/offramp/exchange/initiate", data=request.dict()

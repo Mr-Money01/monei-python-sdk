@@ -28,5 +28,10 @@ class DepositAuthType(str, Enum):
     redirect_url="redirect_url" 
     payment_instruction="payment_instruction"
 
+class AccountType(str, Enum):
+    """Account type enumeration"""
+    FIAT = "FIAT"
+    CRYPTO = "CRYPTO"
+
     
  
