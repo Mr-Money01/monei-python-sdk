@@ -15,7 +15,7 @@ class WalletDepositService:
         self.client = client
 
 
-    async def initialize_deposit(self, method:DepositMethods , request: DepositDto ) -> PaymentResponseDto:  
+    async def initialize(self, method:DepositMethods , request: DepositDto ) -> PaymentResponseDto:  
 
         params = {'method': method.value}
         response = await self.client._request("POST", "/wallet/deposit", data=request.dict(), params = params)
@@ -23,20 +23,20 @@ class WalletDepositService:
     
 
     
-    async def deposit_with_payment_method(self, request:DepositWithPaymentMethodDto)-> PaymentResponseDto:
+    async def with_payment_method(self, request:DepositWithPaymentMethodDto)-> PaymentResponseDto:
 
         """create a payment method for user"""
             
         response = await self.client._request("POST", "/wallet/deposit/payment-method", data=request.dict())
         return DepositWithPaymentMethodResponseDto(**response)
     
-    async def authorize_deposit(self, request: DepositAuthDto) -> DepositAuthResponseDto:
+    async def authorize(self, request: DepositAuthDto) -> DepositAuthResponseDto:
         """Authorize a pending charge"""
         
         response = await self.client._request(
             "POST", "/wallet/deposit/authorize", data=request.dict()
         )
-        return DepositAuthResponseDto(**response)
+        return response
     
     async def generate_payment_link(self, request: GeneratePaymentLinkDto) -> PaymentLinkResponseDto:
         """"""

@@ -31,32 +31,48 @@ class BillerDto(BaseModel):
     commission_on_fee_or_amount: Optional[int] = None
     validity_period: Optional[str] = None
 
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+
 
 class ElectricityBillerDto(BaseModel):
     """Electricity biller information"""
     name: str
     code: str
     billerCode: str
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
     
 class ElectricityBillerResponseDto(BaseModel):
     """Electricity biller information"""
-    statusCode: int
+    StatusCode: int
     message: str 
     data: List[ElectricityBillerDto]
     errors:Optional[Dict[str, Any]] = None
 
-class BillerItemsResponse(BaseModel):
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+    
+
+class BillerItemsResponseDto(BaseModel):
     """"""
     statusCode: int
     message: str 
     data: List[BillerDto]
     errors:Optional[Dict[str, Any]] = None
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
 
 class ValidateBillDto(BaseModel):
     """Validate bill request"""
-    billlerCode:str
+    billerCode:str
     itemCode: str
     customer: str
+    
 
 class CreateBillScheduleDto(BaseModel):
     """Bill schedule request"""
@@ -69,7 +85,7 @@ class AirtimePurchaseDto(BaseModel):
     phoneNumber: str
     biller: str
     amount: float
-    isSchedule: bool = Optional[False]
+    isSchedule: Optional[bool] = False
     scheduleData: Optional[CreateBillScheduleDto] = None
     saveBeneficiary: bool = False
     beneficiaryName: Optional[str] = None
@@ -99,9 +115,9 @@ class CableTvPaymentDto(BaseModel):
     smartcardNumber: str
     biller: str
     itemCode: str
-    isSchedule: bool = False
+    isSchedule: Optional[bool] = False
     scheduleData: Optional[CreateBillScheduleDto] = None
-    saveBeneficiary: bool = False
+    saveBeneficiary: Optional[bool] = False
     beneficiaryName: Optional[str] = None
 
 class BillPaymentDto(BaseModel):
@@ -127,25 +143,33 @@ class BillPaymentResponseDto(BaseModel):
     """"""
     statusCode: int
     message: str 
-    data: List[BillPaymentDto]
+    data: BillPaymentDto
     errors:Optional[Dict[str, Any]] = None
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
 
-class BillDto(BaseDto):
+class BillDto(BaseModel):
     """Bill history item"""
+    id: str
+    createdAt: str
     userId: str
     reference: str
     billerCode: str
     itemCode: str
     customer: str
-    amount: float
-    type: BillCategory
+    amount: str  # Keep as string since API returns string
+    type: BillCategory  # Or use BillCategory if you want enum
     status: str
     txRef: str
     billerName: str
     validityPeriod: Optional[str] = None
-    metadata: Optional[str] = None
+    metadata: Optional[Dict[str, Any]] = None  # Changed to Dict for better compatibility
     token: Optional[str] = None
     units: Optional[str] = None
+    
+    def __contains__(self, key):
+        return hasattr(self, key)
 
 class BillHistoryDto(BaseModel):
     """Bill history item"""
@@ -154,8 +178,12 @@ class BillHistoryDto(BaseModel):
     limit: int
     total: int
     totalPages: int
-    hasNextt: bool
+    hasNext: bool
     hasPrev:bool
+
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
 
 class BillHistoryResponseDto(BaseModel):
     """Bill history response"""
@@ -163,15 +191,55 @@ class BillHistoryResponseDto(BaseModel):
     message: str
     data: BillHistoryDto
     errors:Optional[Dict[str, Any]] = None
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
 
 class BillResponseDto(BaseModel):
     statusCode:int
     message: str
     data: BillDto
     errors:Optional[Dict[str, Any]] = None
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
 
 class BillNotFoundResponseDto(BaseModel):
     success:bool
     message: str
     errorCode:str
     reference:str
+
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+    
+
+class UserDto(BaseModel):
+    """User information"""
+    id: str
+    firstName: str
+    lastName: str
+    email: str
+
+class MetadataDto(BaseModel):
+    """Metadata information"""
+    phoneNumber: str
+    validityPeriod: Optional[str] = None
+    dataPlan: Optional[str] = None
+
+class TransactionResponseDto(BaseModel):
+    """Transaction response DTO"""
+    id: str
+    reference: str
+    type: str
+    billerName: str
+    customer: str
+    amount: str  # Keeping as string since it has decimal places
+    status: str
+    createdAt: datetime
+    updatedAt: datetime
+    metadata: MetadataDto
+    walletBalance: str
+    providerData: Optional[Dict[str, Any]] = None
+    user: UserDto

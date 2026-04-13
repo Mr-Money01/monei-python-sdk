@@ -3,7 +3,7 @@
 from typing import List, Optional
 from ...models.bills import (
     
-    BillHistoryResponseDto, BillResponseDto
+    BillHistoryResponseDto, BillResponseDto, TransactionResponseDto
 )
 
 
@@ -19,18 +19,18 @@ class BillRecordsService:
         """Get bill payment history"""
         response = await self.client._request("GET", "/bills/records")
         #return [BillDto(**bill) for bill in response['data']]
-        return response
+        return BillHistoryResponseDto(**response)
     
     async def get_bill_by_reference(self, reference: str) -> BillResponseDto:
         """Get bill payment history"""
         response = await self.client._request("GET", f"/bills/records/reference/{reference}")
         #return [BillDto(**bill) for bill in response['data']]
-        return response
+        return BillResponseDto(**response)
     
-    async def generate_receipt(self, transaction_id: str) -> dict:
+    async def generate_receipt(self, transaction_id: str) -> TransactionResponseDto:
         """Get bill payment history"""
         response = await self.client._request("GET", f"/bills/records/receipt/{transaction_id}")
         #return [BillDto(**bill) for bill in response['data']]
-        return response
+        return TransactionResponseDto(**response)
     
     

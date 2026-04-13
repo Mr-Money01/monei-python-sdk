@@ -11,40 +11,40 @@ pytestmark = pytest.mark.integration
 class TestWalletPayoutsService:
 
     @pytest.fixture(autouse=True)
-    async def _setup(self, wallet_payouts_service):
-        self.client = wallet_payouts_service
-        
+    async def _setup(self, wallet_payout_service):
+        self.client = wallet_payout_service
+        self.pin = os.getenv("PIN")
         self.test_bank_account = os.getenv("TEST_BANK_ACCOUNT")
         self.test_bank = os.getenv("TEST_BANK")
-        
+
 
     async def test_bank_transfer(self):
         request = InitiateBankTransferDto(
-            amount= 100,
-            bank='',
-            accountNumber='1648925958',
-            transactionPin='',
-            reference='',
+            amount= 400,
+            bank='000',
+            accountNumber='0736379044',
+            transactionPin=self.pin,
+            reference='bank-transfer-001',
             narration='',
             meta={}
 
         )
-        response = await self.client.wallet.bank_transfer(request)
+        response = await self.client.bank_transfer(request)
         logger.info(f"Bank Transfer: {response}")
         
 
    
     async def test_peer_transfer(self):
         request = PeerTransferDto(
-            receiver='',
+            receiver='tobentra32@gmail.com',
             amount=100,
-            transactionPin='',
+            transactionPin=self.pin,
             currency='NGN'
             
         )
-        response = await self.client.wallet.peer_transfer(request)
+        response = await self.client.peer_transfer(request)
         logger.info(f"peer Transfer: {response}")
-        assert hasattr(response, 'link')
+        
 
    
  

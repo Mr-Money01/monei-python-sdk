@@ -21,7 +21,8 @@ from .services.solana_service import SolanaService
 from .services.transaction_service import TransactionService
 from .services.bill_service import BillService
 from .services.beneficiary_service import BeneficiaryService
-from .services.exchange_service import ExchangeService
+from .services.evm_exchange_service import EvmExchangeService
+from .services.sol_exchange_service import SolanaExchangeService
 from .services.agent_service import AgentService
 #from .services.kyc_verification_service import KycVerificationService
 from .services.payment_method_service import PaymentMethodService
@@ -77,20 +78,22 @@ class MoneiClient:
         self.transactions = TransactionService(self)
         self.bills = BillService(self)
         self.beneficiaries = BeneficiaryService(self)
-        self.exchange = ExchangeService(self)
+        self.evm_exchange = EvmExchangeService(self)
+        self.sol_exchange = SolanaExchangeService(self)
         self.agent = AgentService(self)
         #self.kyc = KycVerificationService(self)
         self.payment_methods = PaymentMethodService(self)
         self.offramp_exchange = OfframpExchangeService(self)
         self.offramp_payouts = OfframpPayoutsService(self)
         self.offramp_ledger = OfframpLedgerService(self)
-        self.wallet_account = WalletAccountService(self)
-        self.wallet_deposit = WalletDepositService(self)
-        self.wallet_payout = WalletPayoutService(self)
-        self.wallet_utility = WalletUtilityService(self)
-        self.bill_discovery = BillDiscoveryService(self)
-        self.bill_pay = BillPayService(self)
-        self.bill_record = BillRecordsService(self)
+        self.account = WalletAccountService(self)
+        self.deposit = WalletDepositService(self)
+        self.payout = WalletPayoutService(self)
+        self.utility = WalletUtilityService(self)
+        self.bills_discovery = BillDiscoveryService(self)
+        self.bills_pay = BillPayService(self)
+        self.bills_records = BillRecordsService(self)
+        self.bills_validation = BillValidationService(self)
         self.business_service = BusinessService(self)
     
     @property

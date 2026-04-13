@@ -13,7 +13,7 @@ class TestWalletService:
     @pytest.fixture(autouse=True)
     async def _setup(self, monei_client):
         self.client = monei_client
-        
+        self.pin = os.getenv("PIN")
         self.test_bank_account = os.getenv("TEST_BANK_ACCOUNT")
         self.test_bank = os.getenv("TEST_BANK")
         
@@ -41,7 +41,7 @@ class TestWalletService:
             amount=100,
             accountNumber=self.test_bank_account,
             bank=self.test_bank,
-            transactionPin="0990",
+            transactionPin=self.pin,
             currency="NGN",
             reference="Test withdrawal",
             narration="Withdrawal for testing"

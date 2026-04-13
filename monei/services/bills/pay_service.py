@@ -2,7 +2,7 @@
 
 from typing import List, Optional
 from ...models.bills import (
-     BillResponseDto,AirtimePurchaseDto,DataPurchaseDto,ElectricityPaymentDto,CableTvPaymentDto
+     BillPaymentResponseDto, BillResponseDto,AirtimePurchaseDto,DataPurchaseDto,ElectricityPaymentDto,CableTvPaymentDto
     
 )
 
@@ -18,7 +18,7 @@ class BillPayService:
             "POST", "/bills/pay/airtime", data=request.dict()
         )
         #return BillPaymentDto(**response['data'])
-        return response
+        return BillPaymentResponseDto(**response)
     
     async def buy_mobile_data(self, request: DataPurchaseDto) -> BillResponseDto:
         """Buy mobile data"""
@@ -26,7 +26,7 @@ class BillPayService:
             "POST", "/bills/pay/data", data=request.dict()
         )
         #return BillPaymentDto(**response['data'])
-        return response
+        return BillPaymentResponseDto(**response)
     
     async def buy_electricity(self, request: ElectricityPaymentDto) -> BillResponseDto:
         """Pay electricity bill"""
@@ -34,7 +34,7 @@ class BillPayService:
             "POST", "/bills/pay/electricity", data=request.dict()
         )
         #return BillPaymentDto(**response['data'])
-        return response
+        return BillPaymentResponseDto(**response)
     
     async def subscribe_cable_tv(self, request: CableTvPaymentDto) -> BillResponseDto:
         """Subscribe to cable TV"""
@@ -42,6 +42,5 @@ class BillPayService:
             "POST", "/bills/pay/cable-tv", data=request.dict()
         )
         #return BillPaymentDto(**response['data'])
-        return response
+        return BillPaymentResponseDto(**response)
     
-   

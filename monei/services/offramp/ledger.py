@@ -17,7 +17,7 @@ class OfframpLedgerService:
         """Get transaction history."""
  
         response = await self.client._request("GET", "/offramp/ledger/history")
-        return response
+        return OfframpTransactionListResponseDto(**response)
     
     async def track_order(self, request:OfframpStatusRequestDto) -> OfframpTransactionDetailResponseDto:
         """Get Crypto-to-Fiat quote."""

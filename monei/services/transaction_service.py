@@ -10,7 +10,7 @@ class TransactionService:
     def __init__(self, client):
         self.client = client
     
-    async def get_user_transactions(self) -> List[TransactionResponseDto]:
+    async def get_all(self) -> List[TransactionResponseDto]:
         """Get user transactions"""
         response = await self.client._request("GET", "/transactions/user")
         #print(response)

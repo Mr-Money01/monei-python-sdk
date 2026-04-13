@@ -192,7 +192,7 @@ class Customer(BaseModel):
     phoneNumber: str
     name: str
 
-class PaymentDto(BaseModel):
+class PaymentDtO(BaseModel):
 
     amount:int
     totalAmount:int
@@ -209,6 +209,18 @@ class PaymentDto(BaseModel):
     note:Optional[str] = None
     status:str
     nextAction:DepositNextActionDto
+
+class PaymentDto(BaseModel):
+
+    amount:int
+    reference:str
+    currency:str
+    narration:str
+    accountNumber:Optional[str] = None
+    bankName:Optional[str] = None
+    accountName:Optional[str] = None
+    note:Optional[str] = None
+    status:str
 
 class InitiateBankTransferDto(BaseModel):
     """Deposit request model"""
@@ -346,8 +358,6 @@ class PaymentLinkResponseDto(BaseModel):
         """Allow 'in' operator to work with attributes"""
         return hasattr(self, key)
 
-    
-
 class StatusResponseDto(BaseModel):
     """authorize charge response model"""
     statusCode: int
@@ -358,7 +368,6 @@ class StatusResponseDto(BaseModel):
     def __contains__(self, key):
         """Allow 'in' operator to work with attributes"""
         return hasattr(self, key)
-
 
 class InitiateBankTransferDto(BaseModel):
     """bank transfer request model"""
@@ -375,7 +384,11 @@ class InitiateBankTransferResponseDto(BaseModel):
     statusCode: int
     message: str 
     data: InitiateBankTransferResponseDataDto
-    errors: dict
+    errors: Optional[Dict[str, Any]] = None
+
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
 
 class InitiateBankTransferResponseDataDto(BaseModel):
     
@@ -387,8 +400,12 @@ class PeerTransferResponseDto(BaseModel):
     """p2p transfer response model"""
     statusCode: int
     message: str 
-    data: Any
+    data: Optional[Dict[str, Any]] = None
     error: Optional[str]=None
+
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
 
 class PeerTransferDto(BaseModel):
     """p2p transfer request model"""

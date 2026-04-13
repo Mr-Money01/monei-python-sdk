@@ -1,6 +1,5 @@
 """Solana wallet models"""
-
-from typing import Optional, List
+from typing import Optional, Dict, Any, List 
 from enum import Enum
 from .base import BaseModel
 
@@ -17,6 +16,25 @@ class AddressDto(BaseModel):
     """Wallet address"""
     address: str
 
+class WalletAddressResponseDto(BaseModel):
+    statusCode: int
+    message: str
+    data: AddressDto
+    errors:  Optional[Dict[str, Any]] = None
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+
+class BalanceResponseDto(BaseModel):
+    statusCode: int
+    message: str
+    data: BalanceDto
+    errors:  Optional[Dict[str, Any]] = None
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+
+
 class TokenInfoDto(BaseModel):
     """Token information"""
     mintAddress: str
@@ -28,6 +46,8 @@ class TokenInfoDto(BaseModel):
     priceUsd: Optional[float] = None
     valueUsd: Optional[float] = None
 
+    
+
 class PortfolioDto(BaseModel):
     """Solana portfolio"""
     userId: str
@@ -37,6 +57,22 @@ class PortfolioDto(BaseModel):
     nativeBalanceUsd: Optional[float] = None
     tokens: List[TokenInfoDto]
     totalValueUsd: Optional[float] = None
+
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+
+class PortfolioResponseDto(BaseModel):
+    """Portfolio response wrapper"""
+    statusCode: int
+    message: str
+    data: PortfolioDto
+    errors: Optional[Dict[str, Any]] = None
+
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+
 
 class TransferSolDto(BaseModel):
     """Transfer SOL request"""
@@ -54,3 +90,18 @@ class TransferTokenDto(BaseModel):
 class SignatureDto(BaseModel):
     """Transaction signature"""
     signature: str
+
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+    
+class SignatureResponseDto(BaseModel):
+    """Transaction Response"""
+    statusCode: int
+    message: str
+    data: SignatureDto
+    errors:  Optional[Dict[str, Any]] = None
+
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)

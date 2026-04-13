@@ -22,7 +22,7 @@ class WalletAccountService:
         response = await self.client._request("GET", "/wallet/me", params=params)
         return UserWalletResponseDto(**response)
     
-    async def me(self) -> GetNairaWalletResponseDto:
+    async def get_naira_wallet(self) -> GetNairaWalletResponseDto:
         """Get naira wallet information"""
 
         response = await self.client._request("GET", "/wallet/naira-wallet")

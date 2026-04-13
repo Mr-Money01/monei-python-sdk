@@ -33,7 +33,7 @@ from .models.bills import (
 )
 from .models.exchange import (
     SwapNativeToTokenDto, SwapTokenToTokenDto, SwapTokenToNativeDto,
-    SwapSolToTokenDto, ZeroExQuoteDto, SwapDto, TxHashDto
+    SwapSolToTokenDto, SwapPriceDto, SwapDto, TxHashDto,EvmSwapTokenToTokenDto
 )
 from .models.agent import (
     AgentChatRequestDto, AgentStreamRequestDto, GuestAgentRequestDto,
@@ -68,8 +68,8 @@ __all__ = [
     "TransactionResponseDto", "TransactionDto",
     "BillerDto", "AirtimePurchaseDto", "DataPurchaseDto",
     "ElectricityPaymentDto", "CableTvPaymentDto", "BillPaymentDto", "BillDto", "BillCategory",
-    "SwapNativeToTokenDto", "SwapTokenToTokenDto", "SwapTokenToNativeDto",
-    "SwapSolToTokenDto", "ZeroExQuoteDto", "SwapDto", "TxHashDto",
+    "SwapNativeToTokenDto", "SwapTokenToTokenDto", "SwapTokenToNativeDto", "EvmSwapTokenToTokenDto",
+    "SwapSolToTokenDto", "SwapPriceDto", "SwapDto", "TxHashDto",
     "AgentChatRequestDto", "AgentStreamRequestDto", "GuestAgentRequestDto",
     "AgentChatResponseDto", "ConversationListResponseDto",
     "ConversationMessagesResponseDto", "CreateConversationDto", "PinConversationDto"

@@ -145,36 +145,49 @@ class OfframpHistoryRequestDto(BaseModel):
     page: Optional[str]=None
 
 class OfframpTransactionResponseDto(BaseModel):
+    """Single transaction in history list"""
     id: str
-    internalReference: str
-    provider: str
-    providerTransactionId:str
-    status:OfframpStatus
-    cryptoAmount:int
-    fiatAmount:int
-    exchangeRate:int
-    fromCurrency:str
-    toCurrency:str
-    createdAt:str
-    updatedAt:str
-    expiresAt:str
+    reference: str  # Changed from internalReference
+    status: str  # Or OfframpStatus
+    asset: str  # Changed from fromCurrency
+    network: str
+    cryptoAmount: int
+    fiatAmount: int
+    fiatCurrency: str  # Changed from toCurrency
+    exchangeRate: int
+    beneficiary: TransactionBeneficiaryDto  # New field
+    createdAt: str
+    completedAt: Optional[str] = None  # New field
+    failedAt: Optional[str] = None  # New field
+    # Removed: provider, providerTransactionId, updatedAt, expiresAt
 
     def __contains__(self, key):
         """Allow 'in' operator to work with attributes"""
         return hasattr(self, key)
 
-class MetaDto(BaseDto):
-    currentPage: int
-    itemsPerPage: int
+class TransactionBeneficiaryDto(BaseModel):
+    bankCode: str
+    accountNumber: str
+
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+
+class MetaDto(BaseModel):
+    """Pagination metadata - matches actual API response"""
     totalItems: int
+    itemCount: int
+    itemsPerPage: int
     totalPages: int
+    currentPage: int
+
 
     def __contains__(self, key):
         """Allow 'in' operator to work with attributes"""
         return hasattr(self, key)
 
 class OfframpTransactionListResponseDto(BaseModel):
-    ststusCode:int
+    statusCode:int
     message:str
     data:list[OfframpTransactionResponseDto]
     meta:Optional[MetaDto] = None

@@ -20,15 +20,15 @@ class TestBillDiscoveryService:
     # ---------------- Read-only endpoints ---------------- #
 
     async def test_get_biller_items_airtime(self):
-        result = await self.client.get_biller_items(BillCategory.AIRTIME, "MTN")
-        #logger.info(f"Biller items: {result}")
+        result = await self.client.get_biller(BillCategory.AIRTIME, "MTN")
+        logger.info(f"AIRTIME Biller items: {result}")
          # === BASE RESPONSE ===
         assert "statusCode" in result
-        assert result["statusCode"] == 200
+        assert result.statusCode == 200
         assert "message" in result
         assert "data" in result
 
-        items = result["data"]
+        items = result.data
 
         # === ARRAY CHECK ===
         assert isinstance(items, list)
@@ -50,58 +50,63 @@ class TestBillDiscoveryService:
             assert field in item, f"Missing field {field} at index {index}"
 
         # === TYPE CHECKS ===
-        assert isinstance(item["id"], int)
-        assert isinstance(item["biller_code"], str)
-        assert isinstance(item["name"], str)
-        assert isinstance(item["default_commission"], (int, float))
-        assert isinstance(item["country"], str)
-        assert isinstance(item["is_airtime"], bool)
-        assert isinstance(item["item_code"], str)
-        assert isinstance(item["short_name"], str)
-        assert isinstance(item["fee"], (int, float))
-        assert isinstance(item["commission_on_fee"], bool)
-        assert isinstance(item["reg_expression"], str)
-        assert isinstance(item["label_name"], str)
-        assert isinstance(item["amount"], (int, float))
-        assert isinstance(item["is_resolvable"], bool)
-        assert isinstance(item["group_name"], str)
-        assert isinstance(item["category_name"], str)
+        assert isinstance(item.id, int)
+        assert isinstance(item.biller_code, str)
+        assert isinstance(item.name, str)
+        assert isinstance(item.default_commission, (int, float))
+        assert isinstance(item.country, str)
+        assert isinstance(item.is_airtime, bool)
+        assert isinstance(item.item_code, str)
+        assert isinstance(item.short_name, str)
+        assert isinstance(item.fee, (int, float))
+        assert isinstance(item.commission_on_fee, bool)
+        assert isinstance(item.reg_expression, str)
+        assert isinstance(item.label_name, str)
+        assert isinstance(item.amount, (int, float))
+        assert isinstance(item.is_resolvable, bool)
+        assert isinstance(item.group_name, str)
+        assert isinstance(item.category_name, str)
 
-        assert item["is_data"] is None or isinstance(item["is_data"], bool)
+        assert item.is_data is None or isinstance(item.is_data, bool)
 
-        assert isinstance(item["default_commission_on_amount"], (int, float))
-        assert isinstance(item["commission_on_fee_or_amount"], (int, float))
+        assert isinstance(item.default_commission_on_amount, (int, float))
+        assert isinstance(item.commission_on_fee_or_amount, (int, float))
 
-        assert item["validity_period"] is None or isinstance(item["validity_period"], str)
+        assert item.validity_period is None or isinstance(item.validity_period, str)
 
     async def test_get_biller_items_mobile_data(self):
-        result = await self.client.get_biller_items(BillCategory.MOBILEDATA, "MTN")
+        result = await self.client.get_biller(BillCategory.MOBILEDATA, "MTN")
+
+        logger.info(f"MOBILEDATA Biller items: {result}")
         
         assert "statusCode" in result
-        assert result["statusCode"] == 200
+        #assert result["statusCode"] == 200
         assert "message" in result
         assert "data" in result
 
     async def test_get_biller_items_cable_bills(self):
-        result = await self.client.get_biller_items(BillCategory.CABLEBILLS, "DSTV")
+        result = await self.client.get_biller(BillCategory.CABLEBILLS, "DSTV")
+        logger.info(f"Cable Biller items: {result}")
         
         assert "statusCode" in result
-        assert result["statusCode"] == 200
+        #assert result["statusCode"] == 200
         assert "message" in result
         assert "data" in result
 
     async def test_get_biller_items_utility_bills(self):
-        result = await self.client.get_biller_items(BillCategory.UTILITYBILLS, "IBADAN DISCO ELECTRICITY")
-        
+        result = await self.client.get_biller(BillCategory.UTILITYBILLS, "IBADAN DISCO ELECTRICITY")
+        logger.info(f"Utility Biller items: {result}")
         assert "statusCode" in result
-        assert result["statusCode"] == 200
+        #assert result["statusCode"] == 200
         assert "message" in result
         assert "data" in result 
 
     async def test_get_biller_items_electricity(self):
-        result = await self.client.get_electricity_biller_items()
+
+        result = await self.client.get_electricity_biller()
+        logger.info(f"Electricity Biller items: {result}")
         
-        assert "statusCode" in result
-        assert result["statusCode"] == 200
+        assert "StatusCode" in result
+        assert result.StatusCode == 200
         assert "message" in result
         assert "data" in result

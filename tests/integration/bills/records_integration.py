@@ -20,14 +20,14 @@ class TestBillRecordService:
         
 
     async def test_get_bill_by_reference(self):
-        reference = "bill1773258763788-978e2b1c-edc7-4c67-bfcc-8438a0513f21"
+        reference = "bill1775893118769-978e2b1c-edc7-4c67-bfcc-8438a0513f21"
         bills = await self.client.get_bill_by_reference(reference)
         logger.info(f"Bill payments by reference '{reference}': {bills}")
         
 
     async def test_get_bill_receipt(self):
-        transaction_id = "330b0972-6ecf-4b22-b6d1-69a38917de89"
-        bills = await self.client.get_bill_receipt(transaction_id)
+        transaction_id = "fd67683c-7f62-4512-8495-7f4ce6be8da9"
+        bills = await self.client.generate_receipt(transaction_id)
         logger.info(f"Bill receipt for transaction ID '{transaction_id}': {bills}")
         
 

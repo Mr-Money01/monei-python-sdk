@@ -15,7 +15,7 @@ if sys.platform.startswith("win"):
 # Load environment variables
 # -----------------------------
 load_dotenv()
-API_KEY = os.getenv("MONEI_API_KEY")
+API_KEY = os.getenv("MONEI_API_KEY2")
 BASE_URL = os.getenv("BASE_URL")
 
 DEV_API_KEY = os.getenv("DEV_API_KEY")
@@ -63,6 +63,14 @@ async def exchange_service(monei_client):
     yield monei_client.exchange
 
 @pytest.fixture
+async def evm_exchange_service(monei_client):
+    yield monei_client.evm_exchange
+
+@pytest.fixture
+async def sol_exchange_service(monei_client):
+    yield monei_client.sol_exchange
+
+@pytest.fixture
 async def bill_service(monei_client):
     yield monei_client.bills
 
@@ -96,19 +104,19 @@ async def offramp_ledger_service(monei_client):
 
 @pytest.fixture
 async def wallet_account_service(monei_client):
-    yield monei_client.wallet_account
+    yield monei_client.account
 
 @pytest.fixture
 async def wallet_deposit_service(monei_client):
-    yield monei_client.wallet_deposit
+    yield monei_client.deposit
 
 @pytest.fixture
 async def wallet_payout_service(monei_client):
-    yield monei_client.wallet_payout
+    yield monei_client.payout
 
 @pytest.fixture
 async def wallet_utility_service(monei_client):
-    yield monei_client.wallet_utility
+    yield monei_client.utility
 
 @pytest.fixture
 async def bill_discovery_service(monei_client):
@@ -116,7 +124,7 @@ async def bill_discovery_service(monei_client):
 
 @pytest.fixture
 async def bill_pay_service(monei_client):
-    yield monei_client.bill.pay
+    yield monei_client.bill_pay
 
 @pytest.fixture
 async def bill_record_service(monei_client):

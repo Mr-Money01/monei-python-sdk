@@ -7,6 +7,32 @@ class BalanceDto(BaseModel):
     """Balance model"""
     balance: str
 
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+
+class BalanceResponseDto(BaseModel):
+    statusCode: int
+    message: str
+    data: BalanceDto
+    errors:  Optional[Dict[str, Any]] = None
+
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+
+    
+class UserEvmPortfolioResponseDto(BaseModel):
+    statusCode: int
+    data: UserEvmPortfolioDto
+    message: str
+    errors:  Optional[Dict[str, Any]] = None
+
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+
+
 class UserTokenBalanceDto(BaseModel):
     """Token balance model"""
     contractAddress: Optional[str] = None
@@ -21,6 +47,10 @@ class UserTokenBalanceDto(BaseModel):
     rawBalance: str
     network: str
 
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+
 class UserEvmPortfolioDto(BaseModel):
     """EVM portfolio model"""
     userId: str
@@ -30,6 +60,13 @@ class UserEvmPortfolioDto(BaseModel):
     nativeToken: Optional[UserTokenBalanceDto] = None
     tokens: List[UserTokenBalanceDto]
     updatedAt: str
+
+    
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+
+
 
 class SendNativeTokenDto(BaseModel):
     """Send native token request"""
@@ -44,13 +81,49 @@ class SendTokenDto(BaseModel):
     amount: str
     chainId: int
 
-class Response(BaseModel):
-    """Transaction response"""
+class SupportedChainsResponseDto(BaseModel):
     statusCode: int
     message: str
-    data: Dict[str, Any]
-    errors:Optional[Dict[str, Any]] = None
-    
+    data: List[SupportedChainDto]
+    errors:  Optional[Dict[str, Any]] = None
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
 
+class SupportedChainDto(BaseModel):
+    chain_id: int
+    name: str
+    native_token: str
+    block_explorer_url: str
+    is_testnet: bool
 
-      
+class SendNativeTokenResponseDto(BaseModel):
+    statusCode: int
+    message: str
+    data: Response
+    errors:  Optional[Dict[str, Any]] = None
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+
+class Response(BaseModel):
+    txHash: str
+
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+
+class SendTokenResponseDto(BaseModel):
+    statusCode: int
+    message: str
+    data: Response
+    errors:  Optional[Dict[str, Any]] = None
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)
+
+class Response(BaseModel):
+    txHash: str
+    def __contains__(self, key):
+        """Allow 'in' operator to work with attributes"""
+        return hasattr(self, key)

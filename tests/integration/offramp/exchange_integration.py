@@ -74,13 +74,13 @@ class TestOfframpExchangeService:
             amount = 600,
             token = "USDC",
             network = "ethereum",
-            fiatCurrency = OfframpNetworks.ethereum,
+            fiatCurrency = OfframpCurrency.NGN,
             bankCode = "GTBINGLA",
             accountNumber = "0123456789",
             accountName = "John Doe"
          
         )
-        response = await self.client.crypto_to_fiat(request)
+        response = await self.client.initiate_swap(request)
         logger.info(f"Chat response: {response}")
         #assert hasattr(response, "message")
 
