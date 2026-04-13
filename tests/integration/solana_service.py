@@ -60,6 +60,56 @@ class TestSolanaService:
     async def test_get_portfolio(self):
         result = await self.client.solana.get_portfolio(self.network)
         logger.info(f"Portfolio: {result}")
+        
+         # === BASE RESPONSE ===
+        assert "statusCode" in result
+        assert "message" in result
+        assert "data" in result
+
+        p = result["data"]
+
+        # === PORTFOLIO DATA ===
+        assert "userId" in p
+        assert "address" in p
+        assert "nativeBalance" in p
+        assert "nativeBalanceLamports" in p
+        assert "tokens" in p
+
+        # === VALIDATE NATIVE BALANCE TYPES ===
+        assert isinstance(p["nativeBalance"], str)
+        assert isinstance(p["nativeBalanceLamports"], str)
+
+        # === TOKENS ARRAY ===
+        assert isinstance(p["tokens"], list)
+
+        if len(p["tokens"]) > 0:
+            for t in p["tokens"]:
+                # === MATCH OBJECT (like Jest toMatchObject) ===
+                assert isinstance(t.get("mintAddress"), str)
+                assert isinstance(t.get("name"), str)
+                assert isinstance(t.get("symbol"), str)
+                assert isinstance(t.get("balance"), (int, float))
+                assert isinstance(t.get("rawBalance"), str)
+                assert isinstance(t.get("decimals"), int)
+
+        logger.info(
+            "Sample Token Info: decimals=%s symbol=%s balance=%s mint=%s",
+            t["decimals"],
+            t["symbol"],
+            t["balance"],
+            t["mintAddress"],
+        )
+
+        logger.info(
+            "Solana Portfolio Summary: %s",
+            {
+                "address": p.get("address"),
+                "solBalance": p.get("nativeBalance"),
+                "usdValue": p.get("totalValueUsd"),
+                "tokenCount": len(p["tokens"]),
+            },
+        )
+
 
        
 
