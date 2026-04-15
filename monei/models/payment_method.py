@@ -39,7 +39,6 @@ class PaymentMethodDto(BaseModel):
     virtualAccountId: Optional[str] = None
     ussd: Optional[AddUssdDto] = None
    
-
 class SyncPaymentMethodsDto(BaseModel):
     """synn payment model"""
     subWalletId: str
@@ -62,8 +61,6 @@ class AddCardDto(BaseModel):
     cardNumber: str
     cvv: str
     cardHolderName: str
-
-
 
 class PaymentMethodResponseDto(BaseModel):
     """payment method response model"""

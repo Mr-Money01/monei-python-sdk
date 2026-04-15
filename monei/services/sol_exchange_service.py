@@ -4,7 +4,7 @@ from ..models.exchange import (
      SwapQuoteResponseDto,
      SwapResponseDto,
      SwapTokenToTokenDto, 
-    SwapSolToTokenDto,  SwapDto
+     SwapSolToTokenDto,  SwapDto,SwapTokenToSolDto
 )
 
 
@@ -19,32 +19,22 @@ class SolanaExchangeService:
     # Solana Exchange
    
     
-    async def get_token_to_sol_quote(self, input_mint: str, amount: float) -> SwapQuoteResponseDto:
+    async def get_token_to_sol_quote(self, request: SwapSolToTokenDto) -> SwapQuoteResponseDto:
         """Get Solana swap quote"""
-        params = {
-            'inputMint': input_mint, 
-            'amount': amount
-        }
-        response = await self.client._request("GET", "/solana-exchange/quote/token-to-sol", params=params)
+        
+        response = await self.client._request("GET", "/solana-exchange/quote/token-to-sol", params=request.dict())
         return SwapQuoteResponseDto(**response)
     
-    async def get_sol_to_token_quote(self, input_mint: str, amount: float) -> SwapQuoteResponseDto:
+    async def get_sol_to_token_quote(self, request: SwapTokenToSolDto) -> SwapQuoteResponseDto:
         """Get Solana swap quote"""
-        params = {
-            'outputMint': input_mint, 
-            'amount': amount
-        }
-        response = await self.client._request("GET", "/solana-exchange/quote/sol-to-token", params=params)
+        
+        response = await self.client._request("GET", "/solana-exchange/quote/sol-to-token", params=request.dict())
         return SwapQuoteResponseDto(**response)
 
-    async def get_token_to_token_quote(self, input_mint: str, output_mint: str, amount: float) -> SwapQuoteResponseDto:
+    async def get_token_to_token_quote(self, request: SwapTokenToTokenDto) -> SwapQuoteResponseDto:
         """Get Solana swap quote"""
-        params = {
-            'inputMint': input_mint, 
-            'outputMint': output_mint,
-            'amount': amount
-        }
-        response = await self.client._request("GET", "/solana-exchange/quote/token-to-token", params=params)
+        
+        response = await self.client._request("GET", "/solana-exchange/quote/token-to-token", params=request.dict())
         return SwapQuoteResponseDto(**response)
 
     async def swap_sol_to_token(self, request: SwapSolToTokenDto) -> SwapResponseDto:
@@ -61,7 +51,7 @@ class SolanaExchangeService:
         )
         return SwapResponseDto(**response)
     
-    async def swap_token_to_sol(self, request: SwapSolToTokenDto) -> SwapResponseDto:
+    async def swap_token_to_sol(self, request: SwapTokenToSolDto) -> SwapResponseDto:
         """Swap token to SOL"""
         response = await self.client._request(
             "POST", "/solana-exchange/swap-token-to-sol", data=request.dict()

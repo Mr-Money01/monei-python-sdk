@@ -34,7 +34,6 @@ class BalanceResponseDto(BaseModel):
         """Allow 'in' operator to work with attributes"""
         return hasattr(self, key)
 
-
 class TokenInfoDto(BaseModel):
     """Token information"""
     mintAddress: str
@@ -45,8 +44,6 @@ class TokenInfoDto(BaseModel):
     decimals: int
     priceUsd: Optional[float] = None
     valueUsd: Optional[float] = None
-
-    
 
 class PortfolioDto(BaseModel):
     """Solana portfolio"""
@@ -72,7 +69,6 @@ class PortfolioResponseDto(BaseModel):
     def __contains__(self, key):
         """Allow 'in' operator to work with attributes"""
         return hasattr(self, key)
-
 
 class TransferSolDto(BaseModel):
     """Transfer SOL request"""

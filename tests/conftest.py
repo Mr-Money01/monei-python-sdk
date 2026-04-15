@@ -120,19 +120,19 @@ async def wallet_utility_service(monei_client):
 
 @pytest.fixture
 async def bill_discovery_service(monei_client):
-    yield monei_client.bill_discovery
+    yield monei_client.bills_discovery
 
 @pytest.fixture
 async def bill_pay_service(monei_client):
-    yield monei_client.bill_pay
+    yield monei_client.bills_pay
 
 @pytest.fixture
 async def bill_record_service(monei_client):
-    yield monei_client.bill_record
+    yield monei_client.bills_record
 
 @pytest.fixture
 async def bill_validate_service(monei_client):
-    yield monei_client.bill_validate
+    yield monei_client.bills_validate
 
 
 @pytest.fixture

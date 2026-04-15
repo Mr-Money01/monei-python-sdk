@@ -19,7 +19,7 @@ class TestOfframpPayoutsService:
     # ---------------- Read-only endpoints ---------------- #
 
     async def test_get_offramp_banks(self):
-        response = await self.client.get_offramp_banks()
+        response = await self.client.get_banks()
 
         logger.info(f"Offramp Banks: {response}")
         # Assert
@@ -35,7 +35,7 @@ class TestOfframpPayoutsService:
             accountNumber = "0223353863"
 
         )
-        response = await self.client.verify_offramp_bank(request)
+        response = await self.client.verify_bank_account(request)
         logger.info(f"verify offramp: {response}")
         # Assert
         assert "statusCode" in response

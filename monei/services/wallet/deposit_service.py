@@ -36,7 +36,7 @@ class WalletDepositService:
         response = await self.client._request(
             "POST", "/wallet/deposit/authorize", data=request.dict()
         )
-        return response
+        return DepositAuthResponseDto(**response)
     
     async def generate_payment_link(self, request: GeneratePaymentLinkDto) -> PaymentLinkResponseDto:
         """"""

@@ -39,6 +39,7 @@ class SwapTokenToSolDto(BaseModel):
     """Swap SOL to token request"""
     inputMint: str
     amount: float
+    slippageBps: Optional[int] = None
 
 class TokenDto(BaseModel):
     """Token information"""
@@ -69,10 +70,6 @@ class SwapPriceDto(BaseModel):
         """Allow 'in' operator to work with attributes"""
         return hasattr(self, key)
 
-    
-
-
-
 class SwapDto(BaseModel):
     """Swap response"""
     signature: str
@@ -94,8 +91,6 @@ class SwapPriceResponseDto(BaseModel):
         """Allow 'in' operator to work with attributes"""
         return hasattr(self, key)
     
-
-
 class TxHashResponseDto(BaseModel):
     
     statusCode: int
@@ -107,15 +102,7 @@ class TxHashResponseDto(BaseModel):
     def __contains__(self, key):
         """Allow 'in' operator to work with attributes"""
         return hasattr(self, key)
-
-
-
-
-class TxHashDto(BaseModel):
-
-    txHash: str
     
-
 class SwapQuoteResponseDto(BaseModel):
     statusCode: int
     message: str
@@ -126,9 +113,6 @@ class SwapQuoteResponseDto(BaseModel):
         """Allow 'in' operator to work with attributes"""
         return hasattr(self, key)
     
-
-    
-
 class SwapQuoteDto(BaseModel):
     quoteId: str
     swapMode: str  # 'ExactIn' or 'ExactOut'
@@ -158,7 +142,6 @@ class SwapTokenInfoDto(BaseModel):
     name: str
     decimals: int
 
-
 class SwapAmountsDto(BaseModel):
     inputAmount: str
     outputAmount: str
@@ -169,7 +152,6 @@ class SwapAmountsDto(BaseModel):
 class SwapRatesDto(BaseModel):
     rate: str
     reverseRate: str
-
 
 class SwapFeesDto(BaseModel):
     protocolFeePercent: str
@@ -190,7 +172,6 @@ class UsdValuesDto(BaseModel):
     outputValue: float
     netValue: float
 
-
 class SwapResponseDto(BaseModel):
     status_code: int
     message: str
@@ -198,7 +179,4 @@ class SwapResponseDto(BaseModel):
     errors: Optional[Any] = None
 
 
-class SwapDto(BaseModel):
-    signature: str
-    txUrl: str
 

@@ -60,7 +60,6 @@ class NairaWalletDto(BaseModel):
     updatedAt: datetime
     deletedDate: Optional[datetime] = None
     
-
 class FundWalletByNairaDto(BaseModel):
     """Fund wallet request"""
     amount: float
@@ -85,12 +84,6 @@ class WithdrawWalletDto(BaseModel):
     reference: Optional[str] = None
     narration: Optional[str] = None
 
-class PeerTransferDto(BaseModel):
-    """Peer transfer request"""
-    receiver: str
-    amount: float
-    transactionPin: str
-    currency: Optional[str] = "NGN"
 
 class BankDto(BaseModel):
     """Bank model"""
@@ -99,7 +92,6 @@ class BankDto(BaseModel):
     code: str
     name: str
     
-
 class BankAccountDto(BaseModel):
     """Bank account model"""
     accountName: str
@@ -122,8 +114,6 @@ class BankListResponseDto(BaseModel):
     def __contains__(self, key):
         """Allow 'in' operator to work with attributes"""
         return hasattr(self, key)
-
-
 
 class VirtualAccountDto(BaseModel):
     id:str
@@ -157,7 +147,7 @@ class AddCardDto(BaseModel):
     cvv: str
     cardHolderName:str
 
-class AddUsdtDto(BaseModel):
+class AddUssdDto(BaseModel):
     
     bankCode: str
     
@@ -166,7 +156,7 @@ class DepositDto(BaseModel):
     reference:str
     currency:str
     card: Optional[AddCardDto]=None
-    ussd: Optional[AddUsdtDto]=None
+    ussd: Optional[AddUssdDto]=None
     narration:str
 
 class DepositResponseDto(BaseModel):
@@ -192,7 +182,7 @@ class Customer(BaseModel):
     phoneNumber: str
     name: str
 
-class PaymentDtO(BaseModel):
+class StatusDto(BaseModel):
 
     amount:int
     totalAmount:int
@@ -222,16 +212,7 @@ class PaymentDto(BaseModel):
     note:Optional[str] = None
     status:str
 
-class InitiateBankTransferDto(BaseModel):
-    """Deposit request model"""
 
-    amount: int
-    bank: str
-    accountNumber: str
-    transactionPin: str
-    reference: str
-    narration: Optional[str]=None
-    meta:Optional[Dict[str, Any]] = None
 
 class WithdrawWalletDto(BaseModel):
     
@@ -243,18 +224,9 @@ class WithdrawWalletDto(BaseModel):
     reference: Optional[str]=None
     narration: Optional[str]=None
    
-class InitiateBankTransferResponseDto(BaseModel):
-    
-    statusCode: int
-    message: str 
-    data: InitiateBankTransferResponseDataDto
-    errors: dict
 
-class InitiateBankTransferResponseDataDto(BaseModel):
-    
-    reference: int
-    status: PaymentStatus
-    amount: int
+
+
 
 class DepositWithPaymentMethodDto(BaseModel):
     """create payment request model"""
@@ -362,7 +334,7 @@ class StatusResponseDto(BaseModel):
     """authorize charge response model"""
     statusCode: int
     message: str 
-    data: dict
+    data: StatusDto
     errors: Optional[str]=None
 
     def __contains__(self, key):
@@ -375,9 +347,9 @@ class InitiateBankTransferDto(BaseModel):
     bank: str 
     accountNumber: str
     transactionPin: str
-    reference:str
-    narration:str
-    meta: Dict
+    reference:Optional[str] = None
+    narration:Optional[str] = None
+    meta: Optional[Dict[str, Any]]
 
 class InitiateBankTransferResponseDto(BaseModel):
     
@@ -401,7 +373,7 @@ class PeerTransferResponseDto(BaseModel):
     statusCode: int
     message: str 
     data: Optional[Dict[str, Any]] = None
-    error: Optional[str]=None
+    errors: Optional[str]=None
 
     def __contains__(self, key):
         """Allow 'in' operator to work with attributes"""

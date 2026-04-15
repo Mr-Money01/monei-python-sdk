@@ -20,7 +20,6 @@ class BalanceResponseDto(BaseModel):
     def __contains__(self, key):
         """Allow 'in' operator to work with attributes"""
         return hasattr(self, key)
-
     
 class UserEvmPortfolioResponseDto(BaseModel):
     statusCode: int
@@ -31,7 +30,6 @@ class UserEvmPortfolioResponseDto(BaseModel):
     def __contains__(self, key):
         """Allow 'in' operator to work with attributes"""
         return hasattr(self, key)
-
 
 class UserTokenBalanceDto(BaseModel):
     """Token balance model"""
@@ -65,8 +63,6 @@ class UserEvmPortfolioDto(BaseModel):
     def __contains__(self, key):
         """Allow 'in' operator to work with attributes"""
         return hasattr(self, key)
-
-
 
 class SendNativeTokenDto(BaseModel):
     """Send native token request"""
@@ -122,8 +118,3 @@ class SendTokenResponseDto(BaseModel):
         """Allow 'in' operator to work with attributes"""
         return hasattr(self, key)
 
-class Response(BaseModel):
-    txHash: str
-    def __contains__(self, key):
-        """Allow 'in' operator to work with attributes"""
-        return hasattr(self, key)

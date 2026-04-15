@@ -99,10 +99,7 @@ class TestOfframpLedgerService:
 
 
 
-    @pytest.mark.skipif(
-        not os.getenv("ENABLE_SOL_SWAP_TESTS"),
-        reason="Solana swap tests disabled"
-    )
+    
     async def test_get_history_with_pagination(self):
         # should get offramp history with custom pagination
        
@@ -110,10 +107,7 @@ class TestOfframpLedgerService:
 
         logger.info(f"Transactions: {response}")
 
-    @pytest.mark.skipif(
-        not os.getenv("ENABLE_SOL_SWAP_TESTS"),
-        reason="Solana swap tests disabled"
-    )
+    
     async def test_get_offramp_with_different_pages(self):
         # should get offramp history with different pages
        

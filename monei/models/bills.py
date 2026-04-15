@@ -215,7 +215,7 @@ class BillNotFoundResponseDto(BaseModel):
         return hasattr(self, key)
     
 
-class UserDto(BaseModel):
+class UserInfoDto(BaseModel):
     """User information"""
     id: str
     firstName: str
@@ -228,7 +228,7 @@ class MetadataDto(BaseModel):
     validityPeriod: Optional[str] = None
     dataPlan: Optional[str] = None
 
-class TransactionResponseDto(BaseModel):
+class BillTransactionResponseDto(BaseModel):
     """Transaction response DTO"""
     id: str
     reference: str
@@ -242,4 +242,4 @@ class TransactionResponseDto(BaseModel):
     metadata: MetadataDto
     walletBalance: str
     providerData: Optional[Dict[str, Any]] = None
-    user: UserDto
+    user: UserInfoDto
